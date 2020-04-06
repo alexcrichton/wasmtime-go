@@ -1,0 +1,2786 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/bytecodealliance/wasmtime-go/config.go (94.3%)</option>
+				
+				<option value="file1">github.com/bytecodealliance/wasmtime-go/engine.go (93.3%)</option>
+				
+				<option value="file2">github.com/bytecodealliance/wasmtime-go/error.go (30.8%)</option>
+				
+				<option value="file3">github.com/bytecodealliance/wasmtime-go/exporttype.go (100.0%)</option>
+				
+				<option value="file4">github.com/bytecodealliance/wasmtime-go/extern.go (90.3%)</option>
+				
+				<option value="file5">github.com/bytecodealliance/wasmtime-go/externtype.go (96.4%)</option>
+				
+				<option value="file6">github.com/bytecodealliance/wasmtime-go/ffi.go (100.0%)</option>
+				
+				<option value="file7">github.com/bytecodealliance/wasmtime-go/func.go (95.2%)</option>
+				
+				<option value="file8">github.com/bytecodealliance/wasmtime-go/functype.go (97.3%)</option>
+				
+				<option value="file9">github.com/bytecodealliance/wasmtime-go/global.go (96.9%)</option>
+				
+				<option value="file10">github.com/bytecodealliance/wasmtime-go/globaltype.go (100.0%)</option>
+				
+				<option value="file11">github.com/bytecodealliance/wasmtime-go/importtype.go (96.4%)</option>
+				
+				<option value="file12">github.com/bytecodealliance/wasmtime-go/instance.go (95.1%)</option>
+				
+				<option value="file13">github.com/bytecodealliance/wasmtime-go/limits.go (100.0%)</option>
+				
+				<option value="file14">github.com/bytecodealliance/wasmtime-go/linker.go (82.2%)</option>
+				
+				<option value="file15">github.com/bytecodealliance/wasmtime-go/maybe_gc_no.go (0.0%)</option>
+				
+				<option value="file16">github.com/bytecodealliance/wasmtime-go/memory.go (93.8%)</option>
+				
+				<option value="file17">github.com/bytecodealliance/wasmtime-go/memorytype.go (100.0%)</option>
+				
+				<option value="file18">github.com/bytecodealliance/wasmtime-go/module.go (81.7%)</option>
+				
+				<option value="file19">github.com/bytecodealliance/wasmtime-go/slab.go (100.0%)</option>
+				
+				<option value="file20">github.com/bytecodealliance/wasmtime-go/store.go (100.0%)</option>
+				
+				<option value="file21">github.com/bytecodealliance/wasmtime-go/table.go (68.4%)</option>
+				
+				<option value="file22">github.com/bytecodealliance/wasmtime-go/tabletype.go (95.5%)</option>
+				
+				<option value="file23">github.com/bytecodealliance/wasmtime-go/trap.go (96.9%)</option>
+				
+				<option value="file24">github.com/bytecodealliance/wasmtime-go/val.go (83.9%)</option>
+				
+				<option value="file25">github.com/bytecodealliance/wasmtime-go/valtype.go (52.0%)</option>
+				
+				<option value="file26">github.com/bytecodealliance/wasmtime-go/wasi.go (0.0%)</option>
+				
+				<option value="file27">github.com/bytecodealliance/wasmtime-go/wat2wasm.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+// #include &lt;wasmtime.h&gt;
+import "C"
+import "runtime"
+
+// Compilation strategies for wasmtime
+type Strategy C.wasmtime_strategy_t
+
+const (
+        // Wasmtime will automatically pick an appropriate compilation strategy
+        STRATEGY_AUTO Strategy = C.WASMTIME_STRATEGY_AUTO
+        // Force wasmtime to use the Cranelift backend
+        STRATEGY_CRANELIFT Strategy = C.WASMTIME_STRATEGY_CRANELIFT
+        // Force wasmtime to use the lightbeam backend
+        STRATEGY_LIGHTBEAM Strategy = C.WASMTIME_STRATEGY_LIGHTBEAM
+)
+
+// What degree of optimization wasmtime will perform on generated machine code
+type OptLevel C.wasmtime_opt_level_t
+
+const (
+        // No optimizations will be performed
+        OPT_LEVEL_NONE OptLevel = C.WASMTIME_OPT_LEVEL_NONE
+        // Machine code will be optimized to be as fast as possible
+        OPT_LEVEL_SPEED OptLevel = C.WASMTIME_OPT_LEVEL_SPEED
+        // Machine code will be optimized for speed, but also optimized
+        // to be small, sometimes at the cost of speed.
+        OPT_LEVEL_SPEED_AND_SIZE OptLevel = C.WASMTIME_OPT_LEVEL_SPEED_AND_SIZE
+)
+
+// What sort of profiling to enable, if any.
+type ProfilingStrategy C.wasmtime_profiling_strategy_t
+
+const (
+        // No profiler will be used
+        PROFILING_STRATEGY_NONE ProfilingStrategy = C.WASMTIME_PROFILING_STRATEGY_NONE
+        // The "jitdump" linux support will be used
+        PROFILING_STRATEGY_JITDUMP ProfilingStrategy = C.WASMTIME_PROFILING_STRATEGY_JITDUMP
+)
+
+// Configuration of an `Engine` which is used to globally configure things
+// like wasm features and such.
+type Config struct {
+        _ptr *C.wasm_config_t
+}
+
+// Creates a new `Config` with all default options configured.
+func NewConfig() *Config <span class="cov8" title="1">{
+        config := &amp;Config{_ptr: C.wasm_config_new()}
+        runtime.SetFinalizer(config, func(config *Config) </span><span class="cov8" title="1">{
+                C.wasm_config_delete(config._ptr)
+        }</span>)
+        <span class="cov8" title="1">return config</span>
+}
+
+// Configures whether dwarf debug information for JIT code is enabled
+func (cfg *Config) SetDebugInfo(enabled bool) <span class="cov8" title="1">{
+        C.wasmtime_config_debug_info_set(cfg.ptr(), C.bool(enabled))
+        runtime.KeepAlive(cfg)
+}</span>
+
+// Configures whether the wasm threads proposal is enabled
+func (cfg *Config) SetWasmThreads(enabled bool) <span class="cov8" title="1">{
+        C.wasmtime_config_wasm_threads_set(cfg.ptr(), C.bool(enabled))
+        runtime.KeepAlive(cfg)
+}</span>
+
+// Configures whether the wasm reference types proposal is enabled
+func (cfg *Config) SetWasmReferenceTypes(enabled bool) <span class="cov8" title="1">{
+        C.wasmtime_config_wasm_reference_types_set(cfg.ptr(), C.bool(enabled))
+        runtime.KeepAlive(cfg)
+}</span>
+
+// Configures whether the wasm SIMD proposal is enabled
+func (cfg *Config) SetWasmSIMD(enabled bool) <span class="cov8" title="1">{
+        C.wasmtime_config_wasm_simd_set(cfg.ptr(), C.bool(enabled))
+        runtime.KeepAlive(cfg)
+}</span>
+
+// Configures whether the wasm bulk memory proposal is enabled
+func (cfg *Config) SetWasmBulkMemory(enabled bool) <span class="cov8" title="1">{
+        C.wasmtime_config_wasm_bulk_memory_set(cfg.ptr(), C.bool(enabled))
+        runtime.KeepAlive(cfg)
+}</span>
+
+// Configures whether the wasm multi value proposal is enabled
+func (cfg *Config) SetWasmMultiValue(enabled bool) <span class="cov8" title="1">{
+        C.wasmtime_config_wasm_multi_value_set(cfg.ptr(), C.bool(enabled))
+        runtime.KeepAlive(cfg)
+}</span>
+
+// Configures what compilation strategy is used to compile wasm code
+func (cfg *Config) SetStrategy(strat Strategy) error <span class="cov8" title="1">{
+        err := C.wasmtime_config_strategy_set(cfg.ptr(), C.wasmtime_strategy_t(strat))
+        runtime.KeepAlive(cfg)
+        if err != nil </span><span class="cov0" title="0">{
+                return mkError(err)
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+// Configures whether the cranelift debug verifier will be active when
+// cranelift is used to compile wasm code.
+func (cfg *Config) SetCraneliftDebugVerifier(enabled bool) <span class="cov8" title="1">{
+        C.wasmtime_config_cranelift_debug_verifier_set(cfg.ptr(), C.bool(enabled))
+        runtime.KeepAlive(cfg)
+}</span>
+
+// Configures the cranelift optimization level for generated code
+func (cfg *Config) SetCraneliftOptLevel(level OptLevel) <span class="cov8" title="1">{
+        C.wasmtime_config_cranelift_opt_level_set(cfg.ptr(), C.wasmtime_opt_level_t(level))
+        runtime.KeepAlive(cfg)
+}</span>
+
+// Configures what profiler strategy to use for generated code
+func (cfg *Config) SetProfiler(profiler ProfilingStrategy) error <span class="cov8" title="1">{
+        err := C.wasmtime_config_profiler_set(cfg.ptr(), C.wasmtime_profiling_strategy_t(profiler))
+        runtime.KeepAlive(cfg)
+        if err != nil </span><span class="cov0" title="0">{
+                return mkError(err)
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+// See comments in `ffi.go` for what's going on here
+func (config *Config) ptr() *C.wasm_config_t <span class="cov8" title="1">{
+        ret := config._ptr
+        maybeGC()
+        if ret == nil </span><span class="cov8" title="1">{
+                panic("Config has already been used up")</span>
+        }
+        <span class="cov8" title="1">return ret</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+// An instance of a wasmtime engine which is used to create a `Store`.
+//
+// Engines are a form of global configuration for wasm compilations and modules
+// and such.
+type Engine struct {
+        _ptr *C.wasm_engine_t
+}
+
+// Creates a new `Engine` with default configuration.
+func NewEngine() *Engine <span class="cov8" title="1">{
+        engine := &amp;Engine{_ptr: C.wasm_engine_new()}
+        runtime.SetFinalizer(engine, func(engine *Engine) </span><span class="cov8" title="1">{
+                C.wasm_engine_delete(engine._ptr)
+        }</span>)
+        <span class="cov8" title="1">return engine</span>
+}
+
+// Creates a new `Engine` with the `Config` provided
+//
+// Note that once a `Config` is passed to this method it cannot be used again.
+func NewEngineWithConfig(config *Config) *Engine <span class="cov8" title="1">{
+        if config.ptr() == nil </span><span class="cov0" title="0">{
+                panic("config already used")</span>
+        }
+        <span class="cov8" title="1">engine := &amp;Engine{_ptr: C.wasm_engine_new_with_config(config.ptr())}
+        runtime.SetFinalizer(config, nil)
+        config._ptr = nil
+        runtime.SetFinalizer(engine, func(engine *Engine) </span><span class="cov8" title="1">{
+                C.wasm_engine_delete(engine._ptr)
+        }</span>)
+        <span class="cov8" title="1">return engine</span>
+}
+
+func (engine *Engine) ptr() *C.wasm_engine_t <span class="cov8" title="1">{
+        ret := engine._ptr
+        maybeGC()
+        return ret
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package wasmtime
+
+// #include &lt;wasmtime.h&gt;
+import "C"
+import "runtime"
+
+type Error struct {
+        _ptr *C.wasmtime_error_t
+}
+
+func mkError(ptr *C.wasmtime_error_t) *Error <span class="cov8" title="1">{
+        err := &amp;Error{_ptr: ptr}
+        runtime.SetFinalizer(err, func(err *Error) </span><span class="cov8" title="1">{
+                C.wasmtime_error_delete(err._ptr)
+        }</span>)
+        <span class="cov8" title="1">return err</span>
+}
+
+func (e *Error) ptr() *C.wasmtime_error_t <span class="cov0" title="0">{
+        ret := e._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (e *Error) Error() string <span class="cov0" title="0">{
+        message := C.wasm_byte_vec_t{}
+        C.wasmtime_error_message(e.ptr(), &amp;message)
+        ret := C.GoStringN(message.data, C.int(message.size))
+        runtime.KeepAlive(e)
+        C.wasm_byte_vec_delete(&amp;message)
+        return ret
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+type ExportType struct {
+        _ptr   *C.wasm_exporttype_t
+        _owner interface{}
+}
+
+// Creates a new `ExportType` with the `name` and the type provided.
+func NewExportType(name string, ty AsExternType) *ExportType <span class="cov8" title="1">{
+        name_vec := stringToByteVec(name)
+
+        // Creating an export type requires taking ownership, so create a copy
+        // so we don't have to invalidate pointers here. Shouldn't be too
+        // costly in theory anyway.
+        extern := ty.AsExternType()
+        ptr := C.wasm_externtype_copy(extern.ptr())
+        runtime.KeepAlive(extern)
+
+        // And once we've got all that create the export type!
+        export_ptr := C.wasm_exporttype_new(&amp;name_vec, ptr)
+
+        return mkExportType(export_ptr, nil)
+}</span>
+
+func mkExportType(ptr *C.wasm_exporttype_t, owner interface{}) *ExportType <span class="cov8" title="1">{
+        exporttype := &amp;ExportType{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(exporttype, func(exporttype *ExportType) </span><span class="cov8" title="1">{
+                        C.wasm_exporttype_delete(exporttype._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return exporttype</span>
+}
+
+func (ty *ExportType) ptr() *C.wasm_exporttype_t <span class="cov8" title="1">{
+        ret := ty._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (ty *ExportType) owner() interface{} <span class="cov8" title="1">{
+        if ty._owner != nil </span><span class="cov8" title="1">{
+                return ty._owner
+        }</span>
+        <span class="cov8" title="1">return ty</span>
+}
+
+// Returns the name in the module this export type is exporting
+func (ty *ExportType) Name() string <span class="cov8" title="1">{
+        ptr := C.wasm_exporttype_name(ty.ptr())
+        ret := C.GoStringN(ptr.data, C.int(ptr.size))
+        runtime.KeepAlive(ty)
+        return ret
+}</span>
+
+// Returns the type of item this export type expects
+func (ty *ExportType) Type() *ExternType <span class="cov8" title="1">{
+        ptr := C.wasm_exporttype_type(ty.ptr())
+        return mkExternType(ptr, ty.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+type Extern struct {
+        _ptr   *C.wasm_extern_t
+        _owner interface{}
+}
+
+type AsExtern interface {
+        AsExtern() *Extern
+}
+
+func mkExtern(ptr *C.wasm_extern_t, owner interface{}) *Extern <span class="cov8" title="1">{
+        f := &amp;Extern{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov0" title="0">{
+                runtime.SetFinalizer(f, func(f *Extern) </span><span class="cov0" title="0">{
+                        C.wasm_extern_delete(f._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return f</span>
+}
+
+func (e *Extern) ptr() *C.wasm_extern_t <span class="cov8" title="1">{
+        ret := e._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (e *Extern) owner() interface{} <span class="cov8" title="1">{
+        if e._owner != nil </span><span class="cov8" title="1">{
+                return e._owner
+        }</span>
+        <span class="cov0" title="0">return e</span>
+}
+
+// Returns the type of this export
+func (e *Extern) Type() *ExternType <span class="cov8" title="1">{
+        ptr := C.wasm_extern_type(e.ptr())
+        runtime.KeepAlive(e)
+        return mkExternType(ptr, nil)
+}</span>
+
+// Returns a Func if this export is a function or nil otherwise
+func (e *Extern) Func() *Func <span class="cov8" title="1">{
+        ret := C.wasm_extern_as_func(e.ptr())
+        if ret == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span> else<span class="cov8" title="1"> {
+                return mkFunc(ret, e.owner())
+        }</span>
+}
+
+// Returns a Global if this export is a global or nil otherwise
+func (e *Extern) Global() *Global <span class="cov8" title="1">{
+        ret := C.wasm_extern_as_global(e.ptr())
+        if ret == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span> else<span class="cov8" title="1"> {
+                return mkGlobal(ret, e.owner())
+        }</span>
+}
+
+// Returns a Memory if this export is a memory or nil otherwise
+func (e *Extern) Memory() *Memory <span class="cov8" title="1">{
+        ret := C.wasm_extern_as_memory(e.ptr())
+        if ret == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span> else<span class="cov8" title="1"> {
+                return mkMemory(ret, e.owner())
+        }</span>
+}
+
+// Returns a Table if this export is a table or nil otherwise
+func (e *Extern) Table() *Table <span class="cov8" title="1">{
+        ret := C.wasm_extern_as_table(e.ptr())
+        if ret == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span> else<span class="cov8" title="1"> {
+                return mkTable(ret, e.owner())
+        }</span>
+}
+
+func (e *Extern) AsExtern() *Extern <span class="cov8" title="1">{
+        return e
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+type ExternType struct {
+        _ptr   *C.wasm_externtype_t
+        _owner interface{}
+}
+
+type AsExternType interface {
+        AsExternType() *ExternType
+}
+
+func mkExternType(ptr *C.wasm_externtype_t, owner interface{}) *ExternType <span class="cov8" title="1">{
+        externtype := &amp;ExternType{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(externtype, func(externtype *ExternType) </span><span class="cov0" title="0">{
+                        C.wasm_externtype_delete(externtype._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return externtype</span>
+}
+
+func (ty *ExternType) ptr() *C.wasm_externtype_t <span class="cov8" title="1">{
+        ret := ty._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (ty *ExternType) owner() interface{} <span class="cov8" title="1">{
+        if ty._owner != nil </span><span class="cov8" title="1">{
+                return ty._owner
+        }</span>
+        <span class="cov8" title="1">return ty</span>
+}
+
+// Returns the underlying `FuncType` for this `ExternType` if it's a function
+// type. Otherwise returns `nil`.
+func (ty *ExternType) FuncType() *FuncType <span class="cov8" title="1">{
+        ptr := C.wasm_externtype_as_functype(ty.ptr())
+        if ptr == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+        <span class="cov8" title="1">return mkFuncType(ptr, ty.owner())</span>
+}
+
+// Returns the underlying `GlobalType` for this `ExternType` if it's a function
+// type. Otherwise returns `nil`.
+func (ty *ExternType) GlobalType() *GlobalType <span class="cov8" title="1">{
+        ptr := C.wasm_externtype_as_globaltype(ty.ptr())
+        if ptr == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+        <span class="cov8" title="1">return mkGlobalType(ptr, ty.owner())</span>
+}
+
+// Returns the underlying `TableType` for this `ExternType` if it's a function
+// type. Otherwise returns `nil`.
+func (ty *ExternType) TableType() *TableType <span class="cov8" title="1">{
+        ptr := C.wasm_externtype_as_tabletype(ty.ptr())
+        if ptr == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+        <span class="cov8" title="1">return mkTableType(ptr, ty.owner())</span>
+}
+
+// Returns the underlying `MemoryType` for this `ExternType` if it's a function
+// type. Otherwise returns `nil`.
+func (ty *ExternType) MemoryType() *MemoryType <span class="cov8" title="1">{
+        ptr := C.wasm_externtype_as_memorytype(ty.ptr())
+        if ptr == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+        <span class="cov8" title="1">return mkMemoryType(ptr, ty.owner())</span>
+}
+
+// Returns this type itself
+func (ty *ExternType) AsExternType() *ExternType <span class="cov8" title="1">{
+        return ty
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package wasmtime
+
+// #cgo CFLAGS:-I${SRCDIR}/build/include
+// #cgo !windows LDFLAGS:-lwasmtime -lm -ldl
+// #cgo linux,amd64 LDFLAGS:-L${SRCDIR}/build/linux-x86_64
+// #cgo darwin,amd64 LDFLAGS:-L${SRCDIR}/build/macos-x86_64
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+import "unsafe"
+
+// # What's up with `ptr()` methods?
+//
+// We use `runtime.SetFinalizer` to free all objects we allocate from C. This
+// is intended to make usage of the API much simpler since you don't have to
+// close/free anything. The tricky part here though is laid out in
+// `runtime.SetFinalizer`'s documentation which is that if you read a
+// non-gc-value (like a C pointer) from a GC object then after the value is
+// read the GC value might get garbage collected. This is quite bad for us
+// because the garbage collection will free the C pointer, making the C pointer
+// actually invalid.
+//
+// The solution is to add `runtime.KeepAlive` calls after C function calls to
+// ensure that the GC object lives at least as long as the C function call
+// itself. This is naturally quite error-prone, so the goal here with `ptr()`
+// methods is to make us a bit more resilient to these sorts of errors and
+// expose segfaults during development.
+//
+// Each `ptr()` method has the basic structure of doing these steps:
+//
+// 1. First it reads the pointer value from the GC object
+// 2. Next it conditionally calls `runtime.GC()`, depending on build flags
+// 3. Finally it returns the original pointer value
+//
+// The goal here is to as aggressively as we can collect GC objects when
+// testing and trigger finalizers as frequently as we can. This naturally
+// slows things down quite a bit, so conditional compilation (with the `debug`
+// tag) is used to enable this. Our CI runs tests with `-tag debug` to make
+// sure this is at least run somewhere.
+//
+// If anyone else has a better idea of what to handle all this it would be very
+// much appreciated :)
+
+// Convert a Go string into an owned `wasm_byte_vec_t`
+func stringToByteVec(s string) C.wasm_byte_vec_t <span class="cov8" title="1">{
+        vec := C.wasm_byte_vec_t{}
+        C.wasm_byte_vec_new_uninitialized(&amp;vec, C.size_t(len(s)))
+        C.memcpy(unsafe.Pointer(vec.data), unsafe.Pointer(C._GoStringPtr(s)), vec.size)
+        runtime.KeepAlive(s)
+        return vec
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package wasmtime
+
+// #include "shims.h"
+import "C"
+import (
+        "errors"
+        "reflect"
+        "runtime"
+        "unsafe"
+)
+
+type Func struct {
+        _ptr   *C.wasm_func_t
+        _owner interface{}
+}
+
+type Caller struct {
+        ptr *C.wasmtime_caller_t
+}
+
+type newMapEntry struct {
+        store    *Store
+        callback func(*Caller, []Val) ([]Val, *Trap)
+        nparams  int
+        results  []*ValType
+}
+
+type wrapMapEntry struct {
+        store    *Store
+        callback reflect.Value
+}
+
+var gNEW_MAP = make(map[int]newMapEntry)
+var gNEW_MAP_SLAB slab
+var gWRAP_MAP = make(map[int]wrapMapEntry)
+var gWRAP_MAP_SLAB slab
+var gLAST_PANIC interface{}
+
+// Creates a new `Func` with the given `ty` which, when called, will call `f`
+//
+// The `ty` given is the wasm type signature of the `Func` to create. When called
+// the `f` callback receives two arguments. The first is a `Caller` to learn
+// information about the calling context and the second is a list of arguments
+// represented as a `Val`. The parameters are guaranteed to match the parameters
+// types specified in `ty`.
+//
+// The `f` callback is expected to produce one of two values. Results can be
+// returned as an array of `[]Val`. The number and types of these results much
+// match the `ty` given, otherwise the program will panic. The `f` callback can
+// also produce a trap which will trigger trap unwinding in wasm, and the trap
+// will be returned to the original caller.
+//
+// If the `f` callback panics then the panic will be propagated to the caller
+// as well.
+func NewFunc(
+        store *Store,
+        ty *FuncType,
+        f func(*Caller, []Val) ([]Val, *Trap),
+) *Func <span class="cov8" title="1">{
+        idx := gNEW_MAP_SLAB.allocate()
+        gNEW_MAP[idx] = newMapEntry{
+                store:    store,
+                callback: f,
+                nparams:  len(ty.Params()),
+                results:  ty.Results(),
+        }
+
+        ptr := C.c_func_new_with_env(
+                store.ptr(),
+                ty.ptr(),
+                C.size_t(idx),
+                0,
+        )
+        runtime.KeepAlive(store)
+        runtime.KeepAlive(ty)
+
+        return mkFunc(ptr, nil)
+}</span>
+
+//export goTrampolineNew
+func goTrampolineNew(
+        caller_ptr *C.wasmtime_caller_t,
+        env C.size_t,
+        args_ptr *C.wasm_val_t,
+        results_ptr *C.wasm_val_t,
+) *C.wasm_trap_t <span class="cov8" title="1">{
+        idx := int(env)
+        caller := &amp;Caller{ptr: caller_ptr}
+        defer func() </span><span class="cov8" title="1">{ caller.ptr = nil }</span>()
+
+        <span class="cov8" title="1">entry := gNEW_MAP[idx]
+        params := make([]Val, entry.nparams)
+        var val C.wasm_val_t
+        base := unsafe.Pointer(args_ptr)
+        for i := 0; i &lt; len(params); i++ </span><span class="cov8" title="1">{
+                ptr := (*C.wasm_val_t)(unsafe.Pointer(uintptr(base) + uintptr(i)*unsafe.Sizeof(val)))
+                params[i] = Val{raw: *ptr}
+        }</span>
+
+        <span class="cov8" title="1">var results []Val
+        var trap *Trap
+        func() </span><span class="cov8" title="1">{
+                defer func() </span><span class="cov8" title="1">{ gLAST_PANIC = recover() }</span>()
+                <span class="cov8" title="1">results, trap = entry.callback(caller, params)
+                if trap != nil </span><span class="cov8" title="1">{
+                        return
+                }</span>
+                <span class="cov8" title="1">if len(results) != len(entry.results) </span><span class="cov8" title="1">{
+                        panic("callback didn't produce the correct number of results")</span>
+                }
+                <span class="cov8" title="1">for i, ty := range entry.results </span><span class="cov8" title="1">{
+                        if results[i].Kind() != ty.Kind() </span><span class="cov8" title="1">{
+                                panic("callback produced wrong type of result")</span>
+                        }
+                }
+        }()
+        <span class="cov8" title="1">if trap == nil &amp;&amp; gLAST_PANIC != nil </span><span class="cov8" title="1">{
+                trap = NewTrap(entry.store, "go panicked")
+        }</span>
+        <span class="cov8" title="1">if trap != nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(trap, nil)
+                return trap.ptr()
+        }</span>
+
+        <span class="cov8" title="1">base = unsafe.Pointer(results_ptr)
+        for i := 0; i &lt; len(results); i++ </span><span class="cov8" title="1">{
+                ptr := (*C.wasm_val_t)(unsafe.Pointer(uintptr(base) + uintptr(i)*unsafe.Sizeof(val)))
+                *ptr = results[i].raw
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+//export goFinalizeNew
+func goFinalizeNew(env unsafe.Pointer) <span class="cov8" title="1">{
+        idx := int(uintptr(env))
+        delete(gNEW_MAP, idx)
+        gNEW_MAP_SLAB.deallocate(idx)
+}</span>
+
+// Wraps a native Go function, `f`, as a wasm `Func`.
+//
+// This function differs from `NewFunc` in that it will determine the type
+// signature of the wasm function given the input value `f`. The `f` value
+// provided must be a Go function. It may take any number of the following
+// types as arguments:
+//
+// `int32` - a wasm `i32`
+//
+// `int64` - a wasm `i64`
+//
+// `float32` - a wasm `f32`
+//
+// `float64` - a wasm `f32`
+//
+// `*Caller` - information about the caller's instance
+//
+// The Go function may return any number of values. It can return any number of
+// primitive wasm values (integers/floats), and the last return value may
+// optionally be `*Trap`. If a `*Trap` returned is `nil` then the other values
+// are returned from the wasm function. Otherwise the `*Trap` is returned and
+// it's considered as if the host function trapped.
+//
+// If the function `f` panics then the panic will be propagated to the caller.
+func WrapFunc(
+        store *Store,
+        f interface{},
+) *Func <span class="cov8" title="1">{
+        // Make sure the `interface{}` passed in was indeed a function
+        val := reflect.ValueOf(f)
+        ty := val.Type()
+        if ty.Kind() != reflect.Func </span><span class="cov8" title="1">{
+                panic("callback provided must be a `func`")</span>
+        }
+
+        // infer the parameter types, and `*Caller` type is special in the
+        // parameters so be sure to case on that as well.
+        <span class="cov8" title="1">params := make([]*ValType, 0, ty.NumIn())
+        var caller *Caller
+        for i := 0; i &lt; ty.NumIn(); i++ </span><span class="cov8" title="1">{
+                param_ty := ty.In(i)
+                if param_ty != reflect.TypeOf(caller) </span><span class="cov8" title="1">{
+                        params = append(params, typeToValType(param_ty))
+                }</span>
+        }
+
+        // Then infer the result types, where a final `*Trap` result value is
+        // also special.
+        <span class="cov8" title="1">results := make([]*ValType, 0, ty.NumOut())
+        var trap *Trap
+        for i := 0; i &lt; ty.NumOut(); i++ </span><span class="cov8" title="1">{
+                result_ty := ty.Out(i)
+                if i == ty.NumOut()-1 &amp;&amp; result_ty == reflect.TypeOf(trap) </span><span class="cov8" title="1">{
+                        continue</span>
+                }
+                <span class="cov8" title="1">results = append(results, typeToValType(result_ty))</span>
+        }
+        <span class="cov8" title="1">wasm_ty := NewFuncType(params, results)
+
+        // Store our `f` callback into the slab for wrapped functions, and now
+        // we've got everything necessary to make thw asm handle.
+        idx := gWRAP_MAP_SLAB.allocate()
+        gWRAP_MAP[idx] = wrapMapEntry{
+                callback: val,
+                store:    store,
+        }
+        ptr := C.c_func_new_with_env(
+                store.ptr(),
+                wasm_ty.ptr(),
+                C.size_t(idx),
+                1, // this is `WrapFunc`, not `NewFunc`
+        )
+        runtime.KeepAlive(store)
+        runtime.KeepAlive(wasm_ty)
+        return mkFunc(ptr, nil)</span>
+}
+
+func typeToValType(ty reflect.Type) *ValType <span class="cov8" title="1">{
+        switch ty.Kind() </span>{
+        case reflect.Int32:<span class="cov8" title="1">
+                return NewValType(KindI32)</span>
+        case reflect.Int64:<span class="cov8" title="1">
+                return NewValType(KindI64)</span>
+        case reflect.Float32:<span class="cov8" title="1">
+                return NewValType(KindF32)</span>
+        case reflect.Float64:<span class="cov8" title="1">
+                return NewValType(KindF64)</span>
+        }
+        <span class="cov8" title="1">panic("invalid type in callback that couldn't be converted to wasm type")</span>
+}
+
+//export goTrampolineWrap
+func goTrampolineWrap(
+        caller_ptr *C.wasmtime_caller_t,
+        env C.size_t,
+        args_ptr *C.wasm_val_t,
+        results_ptr *C.wasm_val_t,
+) *C.wasm_trap_t <span class="cov8" title="1">{
+        // Wrap our `Caller` argument in case it's needed
+        caller := &amp;Caller{ptr: caller_ptr}
+        defer func() </span><span class="cov8" title="1">{ caller.ptr = nil }</span>()
+
+        // Convert all our parameters to `[]reflect.Value`, taking special care
+        // for `*Caller` but otherwise reading everything through `Val`.
+        <span class="cov8" title="1">idx := int(env)
+        entry := gWRAP_MAP[idx]
+        ty := entry.callback.Type()
+        params := make([]reflect.Value, ty.NumIn())
+        base := unsafe.Pointer(args_ptr)
+        var raw C.wasm_val_t
+        for i := 0; i &lt; len(params); i++ </span><span class="cov8" title="1">{
+                if ty.In(i) == reflect.TypeOf(caller) </span><span class="cov8" title="1">{
+                        params[i] = reflect.ValueOf(caller)
+                }</span> else<span class="cov8" title="1"> {
+                        ptr := (*C.wasm_val_t)(base)
+                        val := Val{raw: *ptr}
+                        params[i] = reflect.ValueOf(val.Get())
+                        base = unsafe.Pointer(uintptr(base) + unsafe.Sizeof(raw))
+                }</span>
+        }
+
+        // Invoke the function, catching any panics to propagate later. Panics
+        // result in immediately returning a trap.
+        <span class="cov8" title="1">var results []reflect.Value
+        func() </span><span class="cov8" title="1">{
+                defer func() </span><span class="cov8" title="1">{ gLAST_PANIC = recover() }</span>()
+                <span class="cov8" title="1">results = entry.callback.Call(params)</span>
+        }()
+        <span class="cov8" title="1">if gLAST_PANIC != nil </span><span class="cov8" title="1">{
+                trap := NewTrap(entry.store, "go panicked")
+                runtime.SetFinalizer(trap, nil)
+                return trap.ptr()
+        }</span>
+
+        // And now we write all the results into memory depending on the type
+        // of value that was returned.
+        <span class="cov8" title="1">base = unsafe.Pointer(results_ptr)
+        for _, result := range results </span><span class="cov8" title="1">{
+                ptr := (*C.wasm_val_t)(base)
+                switch val := result.Interface().(type) </span>{
+                case int32:<span class="cov8" title="1">
+                        *ptr = ValI32(val).raw</span>
+                case int64:<span class="cov8" title="1">
+                        *ptr = ValI64(val).raw</span>
+                case float32:<span class="cov8" title="1">
+                        *ptr = ValF32(val).raw</span>
+                case float64:<span class="cov8" title="1">
+                        *ptr = ValF64(val).raw</span>
+                case *Trap:<span class="cov8" title="1">
+                        if val != nil </span><span class="cov8" title="1">{
+                                runtime.SetFinalizer(val, nil)
+                                return val.ptr()
+                        }</span>
+                }
+                <span class="cov8" title="1">base = unsafe.Pointer(uintptr(base) + unsafe.Sizeof(raw))</span>
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+//export goFinalizeWrap
+func goFinalizeWrap(env unsafe.Pointer) <span class="cov8" title="1">{
+        idx := int(uintptr(env))
+        delete(gWRAP_MAP, idx)
+        gWRAP_MAP_SLAB.deallocate(idx)
+}</span>
+
+func mkFunc(ptr *C.wasm_func_t, owner interface{}) *Func <span class="cov8" title="1">{
+        f := &amp;Func{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(f, func(f *Func) </span><span class="cov8" title="1">{
+                        C.wasm_func_delete(f._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return f</span>
+}
+
+func (f *Func) ptr() *C.wasm_func_t <span class="cov8" title="1">{
+        ret := f._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (f *Func) owner() interface{} <span class="cov8" title="1">{
+        if f._owner != nil </span><span class="cov0" title="0">{
+                return f._owner
+        }</span>
+        <span class="cov8" title="1">return f</span>
+}
+
+// Returns the type of this func
+func (f *Func) Type() *FuncType <span class="cov8" title="1">{
+        ptr := C.wasm_func_type(f.ptr())
+        runtime.KeepAlive(f)
+        return mkFuncType(ptr, nil)
+}</span>
+
+// Returns the numer of parameters this function expects
+func (f *Func) ParamArity() int <span class="cov8" title="1">{
+        ret := C.wasm_func_param_arity(f.ptr())
+        runtime.KeepAlive(f)
+        return int(ret)
+}</span>
+
+// Returns the numer of results this function produces
+func (f *Func) ResultArity() int <span class="cov8" title="1">{
+        ret := C.wasm_func_result_arity(f.ptr())
+        runtime.KeepAlive(f)
+        return int(ret)
+}</span>
+
+// Invokes this function with the provided `args`.
+//
+// This variadic function must be invoked with the correct number and type of
+// `args` as specified by the type of this function. This property is checked
+// at runtime. Each `args` may have one of the following types:
+//
+// `int32` - a wasm `i32`
+//
+// `int64` - a wasm `i64`
+//
+// `float32` - a wasm `f32`
+//
+// `float64` - a wasm `f64`
+//
+// `Val` - correspond to a wasm value
+//
+// Any other types of `args` will cause this function to panic.
+//
+// This function will have one of three results:
+//
+// 1. If the function returns successfully, then the `interface{}` return
+// argument will be the result of the function. If there were 0 results then
+// this value is `nil`. If there was one result then this is that result.
+// Otherwise if there were multiple results then `[]Val` is returned.
+//
+// 2. If this function invocation traps, then the returned `interface{}` value
+// will be `nil` and a non-`nil` `*Trap` will be returned with information
+// about the trap that happened.
+//
+// 3. If a panic in Go ends up happening somewhere, then this function will
+// panic.
+func (f *Func) Call(args ...interface{}) (interface{}, error) <span class="cov8" title="1">{
+        params := f.Type().Params()
+        if len(args) &gt; len(params) </span><span class="cov8" title="1">{
+                return nil, errors.New("too many arguments provided")
+        }</span>
+        <span class="cov8" title="1">params_raw := make([]C.wasm_val_t, len(args))
+        for i, param := range args </span><span class="cov8" title="1">{
+                switch val := param.(type) </span>{
+                case int:<span class="cov8" title="1">
+                        switch params[i].Kind() </span>{
+                        case KindI32:<span class="cov8" title="1">
+                                params_raw[i] = ValI32(int32(val)).raw</span>
+                        case KindI64:<span class="cov8" title="1">
+                                params_raw[i] = ValI64(int64(val)).raw</span>
+                        default:<span class="cov8" title="1">
+                                return nil, errors.New("integer provided for non-integer argument")</span>
+                        }
+                case int32:<span class="cov8" title="1">
+                        params_raw[i] = ValI32(val).raw</span>
+                case int64:<span class="cov8" title="1">
+                        params_raw[i] = ValI64(val).raw</span>
+                case float32:<span class="cov8" title="1">
+                        params_raw[i] = ValF32(val).raw</span>
+                case float64:<span class="cov8" title="1">
+                        params_raw[i] = ValF64(val).raw</span>
+                case Val:<span class="cov8" title="1">
+                        params_raw[i] = val.raw</span>
+
+                default:<span class="cov8" title="1">
+                        return nil, errors.New("couldn't convert provided argument to wasm type")</span>
+                }
+        }
+
+        <span class="cov8" title="1">results_raw := make([]C.wasm_val_t, f.ResultArity())
+
+        var params_ptr, results_ptr *C.wasm_val_t
+        var trap *C.wasm_trap_t
+        if len(params_raw) &gt; 0 </span><span class="cov8" title="1">{
+                params_ptr = &amp;params_raw[0]
+        }</span>
+        <span class="cov8" title="1">if len(results_raw) &gt; 0 </span><span class="cov8" title="1">{
+                results_ptr = &amp;results_raw[0]
+        }</span>
+
+        <span class="cov8" title="1">err := C.wasmtime_func_call(
+                f.ptr(),
+                params_ptr,
+                C.size_t(len(params_raw)),
+                results_ptr,
+                C.size_t(len(results_raw)),
+                &amp;trap,
+        )
+        runtime.KeepAlive(f)
+        runtime.KeepAlive(params_raw)
+
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, mkError(err)
+        }</span>
+
+        <span class="cov8" title="1">if trap != nil </span><span class="cov8" title="1">{
+                trap := mkTrap(trap)
+                last_panic := gLAST_PANIC
+                gLAST_PANIC = nil
+                if last_panic != nil </span><span class="cov8" title="1">{
+                        panic(last_panic)</span>
+                }
+                <span class="cov8" title="1">return nil, trap</span>
+        }
+
+        <span class="cov8" title="1">if len(results_raw) == 0 </span><span class="cov8" title="1">{
+                return nil, nil
+        }</span> else<span class="cov8" title="1"> if len(results_raw) == 1 </span><span class="cov8" title="1">{
+                val := Val{raw: results_raw[0]}
+                return val.Get(), nil
+        }</span> else<span class="cov8" title="1"> {
+                results := make([]Val, len(results_raw))
+                for i, raw := range results_raw </span><span class="cov8" title="1">{
+                        results[i] = Val{raw}
+                }</span>
+                <span class="cov8" title="1">return results, nil</span>
+        }
+
+}
+
+func (f *Func) AsExtern() *Extern <span class="cov8" title="1">{
+        ptr := C.wasm_func_as_extern(f.ptr())
+        return mkExtern(ptr, f.owner())
+}</span>
+
+// Gets an exported item from the caller's module.
+//
+// May return `nil` if the export doesn't, if it's not a memory, if there isn't
+// a caller, etc.
+func (c *Caller) GetExport(name string) *Extern <span class="cov0" title="0">{
+        if c.ptr == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+        <span class="cov0" title="0">ptr := C.go_caller_export_get(
+                c.ptr,
+                C._GoStringPtr(name),
+                C._GoStringLen(name),
+        )
+        runtime.KeepAlive(name)
+        runtime.KeepAlive(c)
+        if ptr == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span> else<span class="cov0" title="0"> {
+                return mkExtern(ptr, nil)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+import "unsafe"
+
+type FuncType struct {
+        _ptr   *C.wasm_functype_t
+        _owner interface{}
+}
+
+// Creates a new `FuncType` with the `kind` provided
+func NewFuncType(params, results []*ValType) *FuncType <span class="cov8" title="1">{
+        param_vec := mkValTypeList(params)
+        result_vec := mkValTypeList(results)
+
+        ptr := C.wasm_functype_new(&amp;param_vec, &amp;result_vec)
+
+        return mkFuncType(ptr, nil)
+}</span>
+
+func mkValTypeList(tys []*ValType) C.wasm_valtype_vec_t <span class="cov8" title="1">{
+        vec := C.wasm_valtype_vec_t{}
+        C.wasm_valtype_vec_new_uninitialized(&amp;vec, C.size_t(len(tys)))
+        base := unsafe.Pointer(vec.data)
+        for i, ty := range tys </span><span class="cov8" title="1">{
+                ptr := C.wasm_valtype_new(C.wasm_valtype_kind(ty.ptr()))
+                *(**C.wasm_valtype_t)(unsafe.Pointer(uintptr(base) + unsafe.Sizeof(ptr)*uintptr(i))) = ptr
+        }</span>
+        <span class="cov8" title="1">runtime.KeepAlive(tys)
+        return vec</span>
+}
+
+func mkFuncType(ptr *C.wasm_functype_t, owner interface{}) *FuncType <span class="cov8" title="1">{
+        functype := &amp;FuncType{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(functype, func(functype *FuncType) </span><span class="cov8" title="1">{
+                        C.wasm_functype_delete(functype._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return functype</span>
+}
+
+func (ty *FuncType) ptr() *C.wasm_functype_t <span class="cov8" title="1">{
+        ret := ty._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (ty *FuncType) owner() interface{} <span class="cov8" title="1">{
+        if ty._owner != nil </span><span class="cov0" title="0">{
+                return ty._owner
+        }</span>
+        <span class="cov8" title="1">return ty</span>
+}
+
+// Returns the parameter types of this function type
+func (ty *FuncType) Params() []*ValType <span class="cov8" title="1">{
+        ptr := C.wasm_functype_params(ty.ptr())
+        return ty.convertTypeList(ptr)
+}</span>
+
+// Returns the result types of this function type
+func (ty *FuncType) Results() []*ValType <span class="cov8" title="1">{
+        ptr := C.wasm_functype_results(ty.ptr())
+        return ty.convertTypeList(ptr)
+}</span>
+
+func (ty *FuncType) convertTypeList(list *C.wasm_valtype_vec_t) []*ValType <span class="cov8" title="1">{
+        ret := make([]*ValType, list.size)
+
+        base := unsafe.Pointer(list.data)
+        var ptr *C.wasm_valtype_t
+        for i := 0; i &lt; int(list.size); i++ </span><span class="cov8" title="1">{
+                ptr := *(**C.wasm_valtype_t)(unsafe.Pointer(uintptr(base) + unsafe.Sizeof(ptr)*uintptr(i)))
+                ty := mkValType(ptr, ty.owner())
+                ret[i] = ty
+        }</span>
+        <span class="cov8" title="1">return ret</span>
+}
+
+// Converts this type to an instance of `ExternType`
+func (ty *FuncType) AsExternType() *ExternType <span class="cov8" title="1">{
+        ptr := C.wasm_functype_as_externtype_const(ty.ptr())
+        return mkExternType(ptr, ty.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package wasmtime
+
+// #include &lt;wasmtime.h&gt;
+import "C"
+import "runtime"
+
+type Global struct {
+        _ptr   *C.wasm_global_t
+        _owner interface{}
+}
+
+// Creates a new `Global` in the given `Store` with the specified `ty` and
+// initial value `val`.
+func NewGlobal(
+        store *Store,
+        ty *GlobalType,
+        val Val,
+) (*Global, error) <span class="cov8" title="1">{
+        var ptr *C.wasm_global_t
+        err := C.wasmtime_global_new(
+                store.ptr(),
+                ty.ptr(),
+                &amp;val.raw,
+                &amp;ptr,
+        )
+        runtime.KeepAlive(store)
+        runtime.KeepAlive(ty)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, mkError(err)
+        }</span>
+
+        <span class="cov8" title="1">return mkGlobal(ptr, nil), nil</span>
+}
+
+func mkGlobal(ptr *C.wasm_global_t, owner interface{}) *Global <span class="cov8" title="1">{
+        f := &amp;Global{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(f, func(f *Global) </span><span class="cov8" title="1">{
+                        C.wasm_global_delete(f._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return f</span>
+}
+
+func (f *Global) ptr() *C.wasm_global_t <span class="cov8" title="1">{
+        ret := f._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (f *Global) owner() interface{} <span class="cov8" title="1">{
+        if f._owner != nil </span><span class="cov0" title="0">{
+                return f._owner
+        }</span>
+        <span class="cov8" title="1">return f</span>
+}
+
+// Returns the type of this global
+func (g *Global) Type() *GlobalType <span class="cov8" title="1">{
+        ptr := C.wasm_global_type(g.ptr())
+        runtime.KeepAlive(g)
+        return mkGlobalType(ptr, nil)
+}</span>
+
+// Gets the value of this global
+func (g *Global) Get() Val <span class="cov8" title="1">{
+        ret := Val{}
+        C.wasm_global_get(g.ptr(), &amp;ret.raw)
+        runtime.KeepAlive(g)
+        return ret
+}</span>
+
+// Sets the value of this global
+func (g *Global) Set(val Val) error <span class="cov8" title="1">{
+        err := C.wasmtime_global_set(g.ptr(), &amp;val.raw)
+        runtime.KeepAlive(g)
+        if err == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span> else<span class="cov8" title="1"> {
+                return mkError(err)
+        }</span>
+}
+
+func (g *Global) AsExtern() *Extern <span class="cov8" title="1">{
+        ptr := C.wasm_global_as_extern(g.ptr())
+        return mkExtern(ptr, g.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+type GlobalType struct {
+        _ptr   *C.wasm_globaltype_t
+        _owner interface{}
+}
+
+// Creates a new `GlobalType` with the `kind` provided and whether it's
+// `mutable` or not
+func NewGlobalType(content *ValType, mutable bool) *GlobalType <span class="cov8" title="1">{
+        mutability := C.WASM_CONST
+        if mutable </span><span class="cov8" title="1">{
+                mutability = C.WASM_VAR
+        }</span>
+        <span class="cov8" title="1">content_ptr := C.wasm_valtype_new(C.wasm_valtype_kind(content.ptr()))
+        runtime.KeepAlive(content)
+        ptr := C.wasm_globaltype_new(content_ptr, C.wasm_mutability_t(mutability))
+
+        return mkGlobalType(ptr, nil)</span>
+}
+
+func mkGlobalType(ptr *C.wasm_globaltype_t, owner interface{}) *GlobalType <span class="cov8" title="1">{
+        globaltype := &amp;GlobalType{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(globaltype, func(globaltype *GlobalType) </span><span class="cov8" title="1">{
+                        C.wasm_globaltype_delete(globaltype._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return globaltype</span>
+}
+
+func (ty *GlobalType) ptr() *C.wasm_globaltype_t <span class="cov8" title="1">{
+        ret := ty._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (ty *GlobalType) owner() interface{} <span class="cov8" title="1">{
+        if ty._owner != nil </span><span class="cov8" title="1">{
+                return ty._owner
+        }</span>
+        <span class="cov8" title="1">return ty</span>
+}
+
+// Returns the type of value stored in this global
+func (ty *GlobalType) Content() *ValType <span class="cov8" title="1">{
+        ptr := C.wasm_globaltype_content(ty.ptr())
+        return mkValType(ptr, ty.owner())
+}</span>
+
+// Returns whether this global type is mutable or not
+func (ty *GlobalType) Mutable() bool <span class="cov8" title="1">{
+        ret := C.wasm_globaltype_mutability(ty.ptr()) == C.WASM_VAR
+        runtime.KeepAlive(ty)
+        return ret
+}</span>
+
+// Converts this type to an instance of `ExternType`
+func (ty *GlobalType) AsExternType() *ExternType <span class="cov8" title="1">{
+        ptr := C.wasm_globaltype_as_externtype_const(ty.ptr())
+        return mkExternType(ptr, ty.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+type ImportType struct {
+        _ptr   *C.wasm_importtype_t
+        _owner interface{}
+}
+
+// Creates a new `ImportType` with the given `module` and `name` and the type
+// provided.
+func NewImportType(module, name string, ty AsExternType) *ImportType <span class="cov8" title="1">{
+        module_vec := stringToByteVec(module)
+        name_vec := stringToByteVec(name)
+
+        // Creating an import type requires taking ownership, so create a copy
+        // so we don't have to invalidate pointers here. Shouldn't be too
+        // costly in theory anyway.
+        extern := ty.AsExternType()
+        ptr := C.wasm_externtype_copy(extern.ptr())
+        runtime.KeepAlive(extern)
+
+        // And once we've got all that create the import type!
+        import_ptr := C.wasm_importtype_new(&amp;module_vec, &amp;name_vec, ptr)
+
+        return mkImportType(import_ptr, nil)
+}</span>
+
+func mkImportType(ptr *C.wasm_importtype_t, owner interface{}) *ImportType <span class="cov8" title="1">{
+        importtype := &amp;ImportType{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(importtype, func(importtype *ImportType) </span><span class="cov0" title="0">{
+                        C.wasm_importtype_delete(importtype._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return importtype</span>
+}
+
+func (ty *ImportType) ptr() *C.wasm_importtype_t <span class="cov8" title="1">{
+        ret := ty._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (ty *ImportType) owner() interface{} <span class="cov8" title="1">{
+        if ty._owner != nil </span><span class="cov8" title="1">{
+                return ty._owner
+        }</span>
+        <span class="cov8" title="1">return ty</span>
+}
+
+// Returns the name in the module this import type is importing
+func (ty *ImportType) Module() string <span class="cov8" title="1">{
+        ptr := C.wasm_importtype_module(ty.ptr())
+        ret := C.GoStringN(ptr.data, C.int(ptr.size))
+        runtime.KeepAlive(ty)
+        return ret
+}</span>
+
+// Returns the name in the module this import type is importing
+func (ty *ImportType) Name() string <span class="cov8" title="1">{
+        ptr := C.wasm_importtype_name(ty.ptr())
+        ret := C.GoStringN(ptr.data, C.int(ptr.size))
+        runtime.KeepAlive(ty)
+        return ret
+}</span>
+
+// Returns the type of item this import type expects
+func (ty *ImportType) Type() *ExternType <span class="cov8" title="1">{
+        ptr := C.wasm_importtype_type(ty.ptr())
+        return mkExternType(ptr, ty.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package wasmtime
+
+// #include &lt;wasmtime.h&gt;
+import "C"
+import "runtime"
+import "unsafe"
+
+type Instance struct {
+        _ptr    *C.wasm_instance_t
+        exports map[string]*Extern
+}
+
+// Instantiates a WebAssembly `module` with the `imports` provided.
+//
+// This function will attempt to create a new wasm instance given the provided
+// imports. This can fail if the wrong number of imports are specified, the
+// imports aren't of the right type, or for other resource-related issues.
+//
+// This will also run the `start` function of the instance, returning an error
+// if it traps.
+func NewInstance(module *Module, imports []*Extern) (*Instance, error) <span class="cov8" title="1">{
+        imports_raw := make([]*C.wasm_extern_t, len(imports))
+        for i, imp := range imports </span><span class="cov8" title="1">{
+                imports_raw[i] = imp.ptr()
+        }</span>
+        <span class="cov8" title="1">var imports_raw_ptr **C.wasm_extern_t
+        if len(imports) &gt; 0 </span><span class="cov8" title="1">{
+                imports_raw_ptr = &amp;imports_raw[0]
+        }</span>
+        <span class="cov8" title="1">var trap *C.wasm_trap_t
+        var ptr *C.wasm_instance_t
+        err := C.wasmtime_instance_new(
+                module.ptr(),
+                imports_raw_ptr,
+                C.size_t(len(imports)),
+                &amp;ptr,
+                &amp;trap,
+        )
+        runtime.KeepAlive(module)
+        runtime.KeepAlive(imports)
+        runtime.KeepAlive(imports_raw)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, mkError(err)
+        }</span>
+        <span class="cov8" title="1">if trap != nil </span><span class="cov8" title="1">{
+                return nil, mkTrap(trap)
+        }</span>
+        <span class="cov8" title="1">return mkInstance(ptr, module), nil</span>
+}
+
+func mkInstance(ptr *C.wasm_instance_t, module *Module) *Instance <span class="cov8" title="1">{
+        instance := &amp;Instance{
+                _ptr:    ptr,
+                exports: make(map[string]*Extern),
+        }
+        runtime.SetFinalizer(instance, func(instance *Instance) </span><span class="cov0" title="0">{
+                C.wasm_instance_delete(instance._ptr)
+        }</span>)
+        <span class="cov8" title="1">exports := instance.Exports()
+        for i, ty := range module.Exports() </span><span class="cov8" title="1">{
+                instance.exports[ty.Name()] = exports[i]
+        }</span>
+        <span class="cov8" title="1">return instance</span>
+}
+
+func (m *Instance) ptr() *C.wasm_instance_t <span class="cov8" title="1">{
+        ret := m._ptr
+        maybeGC()
+        return ret
+}</span>
+
+type externList struct {
+        vec C.wasm_extern_vec_t
+}
+
+// Returns a list of exports from this instance.
+//
+// Each export is returned as a `*Extern` and lines up with the exports list of
+// the associated `Module`.
+func (i *Instance) Exports() []*Extern <span class="cov8" title="1">{
+        externs := &amp;externList{}
+        C.wasm_instance_exports(i.ptr(), &amp;externs.vec)
+        runtime.KeepAlive(i)
+        runtime.SetFinalizer(externs, func(externs *externList) </span><span class="cov0" title="0">{
+                C.wasm_extern_vec_delete(&amp;externs.vec)
+        }</span>)
+
+        <span class="cov8" title="1">ret := make([]*Extern, int(externs.vec.size))
+        base := unsafe.Pointer(externs.vec.data)
+        var ptr *C.wasm_extern_t
+        for i := 0; i &lt; int(externs.vec.size); i++ </span><span class="cov8" title="1">{
+                ptr := *(**C.wasm_extern_t)(unsafe.Pointer(uintptr(base) + unsafe.Sizeof(ptr)*uintptr(i)))
+                ty := mkExtern(ptr, externs)
+                ret[i] = ty
+        }</span>
+        <span class="cov8" title="1">return ret</span>
+}
+
+// Attempts to find an export on this instance by `name`
+//
+// May return `nil` if this instance has no export named `name`
+func (i *Instance) GetExport(name string) *Extern <span class="cov8" title="1">{
+        return i.exports[name]
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+// Value for the Max field in Limits
+const LIMITS_MAX_NONE = 0xffffffff
+
+// Resource limits specified for a TableType and MemoryType
+type Limits struct {
+        // The minimum size of this resource, in units specified by the resource
+        // itself.
+        Min uint32
+        // The maximum size of this resource, in units specified by the resource
+        // itself.
+        //
+        // A value of LIMITS_MAX_NONE will mean that there is no maximum.
+        Max uint32
+}
+
+func (limits Limits) ffi() C.wasm_limits_t <span class="cov8" title="1">{
+        return C.wasm_limits_t{
+                min: C.uint32_t(limits.Min),
+                max: C.uint32_t(limits.Max),
+        }
+}</span>
+
+func mkLimits(ptr *C.wasm_limits_t, owner interface{}) Limits <span class="cov8" title="1">{
+        ret := Limits{
+                Min: uint32(ptr.min),
+                Max: uint32(ptr.max),
+        }
+        runtime.KeepAlive(owner)
+        return ret
+}</span>
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package wasmtime
+
+// #include &lt;wasmtime.h&gt;
+// #include "shims.h"
+import "C"
+import "runtime"
+
+type Linker struct {
+        _ptr  *C.wasmtime_linker_t
+        Store *Store
+}
+
+func NewLinker(store *Store) *Linker <span class="cov8" title="1">{
+        ptr := C.wasmtime_linker_new(store.ptr())
+        runtime.KeepAlive(store)
+        return mkLinker(ptr, store)
+}</span>
+
+func mkLinker(ptr *C.wasmtime_linker_t, store *Store) *Linker <span class="cov8" title="1">{
+        linker := &amp;Linker{_ptr: ptr, Store: store}
+        runtime.SetFinalizer(linker, func(linker *Linker) </span><span class="cov0" title="0">{
+                C.wasmtime_linker_delete(linker._ptr)
+        }</span>)
+        <span class="cov8" title="1">return linker</span>
+}
+
+func (l *Linker) ptr() *C.wasmtime_linker_t <span class="cov8" title="1">{
+        ret := l._ptr
+        maybeGC()
+        return ret
+}</span>
+
+// Configures whether names can be redefined after they've already been defined
+// in this linker.
+func (l *Linker) AllowShadowing(allow bool) <span class="cov8" title="1">{
+        C.wasmtime_linker_allow_shadowing(l.ptr(), C.bool(allow))
+        runtime.KeepAlive(l)
+}</span>
+
+// Defines a new item in this linker with the given module/name pair. Returns
+// an error if shadowing is disallowed and the module/name is already defined.
+func (l *Linker) Define(module, name string, item AsExtern) error <span class="cov8" title="1">{
+        extern := item.AsExtern()
+        err := C.go_linker_define(
+                l.ptr(),
+                C._GoStringPtr(module),
+                C._GoStringLen(module),
+                C._GoStringPtr(name),
+                C._GoStringLen(name),
+                extern.ptr(),
+        )
+        runtime.KeepAlive(l)
+        runtime.KeepAlive(module)
+        runtime.KeepAlive(name)
+        runtime.KeepAlive(extern)
+        if err == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span> else<span class="cov8" title="1"> {
+                return mkError(err)
+        }</span>
+}
+
+// Convenience wrapper to calling Define and WrapFunc.
+//
+// Returns an error if shadowing is disabled and the name is already defined.
+func (l *Linker) DefineFunc(module, name string, f interface{}) error <span class="cov8" title="1">{
+        return l.Define(module, name, WrapFunc(l.Store, f))
+}</span>
+
+// Defines all exports of an instance provided under the module name provided.
+//
+// Returns an error if shadowing is disabled and names are already defined.
+func (l *Linker) DefineInstance(module string, instance *Instance) error <span class="cov8" title="1">{
+        err := C.go_linker_define_instance(
+                l.ptr(),
+                C._GoStringPtr(module),
+                C._GoStringLen(module),
+                instance.ptr(),
+        )
+        runtime.KeepAlive(l)
+        runtime.KeepAlive(module)
+        runtime.KeepAlive(instance)
+        if err == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span> else<span class="cov8" title="1"> {
+                return mkError(err)
+        }</span>
+}
+
+// Links a WASI module into this linker, ensuring that all exported functions
+// are available for linking.
+//
+// Returns an error if shadowing is disabled and names are already defined.
+func (l *Linker) DefineWasi(instance *WasiInstance) error <span class="cov0" title="0">{
+        err := C.wasmtime_linker_define_wasi(l.ptr(), instance.ptr())
+        runtime.KeepAlive(l)
+        runtime.KeepAlive(instance)
+        if err == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span> else<span class="cov0" title="0"> {
+                return mkError(err)
+        }</span>
+}
+
+// Instantates a module with all imports defined in this linker.
+//
+// Returns an error if the instance's imports couldn't be satisfied, had the
+// wrong types, or if a trap happened executing the start function.
+func (l *Linker) Instantiate(module *Module) (*Instance, error) <span class="cov8" title="1">{
+        var trap *C.wasm_trap_t
+        var ret *C.wasm_instance_t
+        err := C.wasmtime_linker_instantiate(l.ptr(), module.ptr(), &amp;ret, &amp;trap)
+        runtime.KeepAlive(l)
+        runtime.KeepAlive(module)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, mkError(err)
+        }</span>
+        <span class="cov8" title="1">if trap != nil </span><span class="cov8" title="1">{
+                return nil, mkTrap(trap)
+        }</span>
+        <span class="cov8" title="1">return mkInstance(ret, module), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">// +build !debug
+
+package wasmtime
+
+// See `ffi.go` documentation about `ptr()` for what's going on here.
+
+func maybeGC() {<span class="cov8" title="1">
+}</span>
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+import "unsafe"
+
+type Memory struct {
+        _ptr   *C.wasm_memory_t
+        _owner interface{}
+}
+
+// Creates a new `Memory` in the given `Store` with the specified `ty`.
+func NewMemory(store *Store, ty *MemoryType) *Memory <span class="cov8" title="1">{
+        ptr := C.wasm_memory_new(store.ptr(), ty.ptr())
+        runtime.KeepAlive(store)
+        runtime.KeepAlive(ty)
+        return mkMemory(ptr, nil)
+}</span>
+
+func mkMemory(ptr *C.wasm_memory_t, owner interface{}) *Memory <span class="cov8" title="1">{
+        f := &amp;Memory{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(f, func(f *Memory) </span><span class="cov0" title="0">{
+                        C.wasm_memory_delete(f._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return f</span>
+}
+
+func (f *Memory) ptr() *C.wasm_memory_t <span class="cov8" title="1">{
+        ret := f._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (f *Memory) owner() interface{} <span class="cov8" title="1">{
+        if f._owner != nil </span><span class="cov0" title="0">{
+                return f._owner
+        }</span>
+        <span class="cov8" title="1">return f</span>
+}
+
+// Returns the type of this memory
+func (m *Memory) Type() *MemoryType <span class="cov8" title="1">{
+        ptr := C.wasm_memory_type(m.ptr())
+        runtime.KeepAlive(m)
+        return mkMemoryType(ptr, nil)
+}</span>
+
+// Returns the raw pointer in memory of where this memory starts
+func (m *Memory) Data() unsafe.Pointer <span class="cov8" title="1">{
+        ret := unsafe.Pointer(C.wasm_memory_data(m.ptr()))
+        runtime.KeepAlive(m)
+        return ret
+}</span>
+
+// Returns the size, in bytes, that `Data()` is valid for
+func (m *Memory) DataSize() uintptr <span class="cov8" title="1">{
+        ret := uintptr(C.wasm_memory_data_size(m.ptr()))
+        runtime.KeepAlive(m)
+        return ret
+}</span>
+
+// Returns the size, in wasm pages, of this memory
+func (m *Memory) Size() uint32 <span class="cov8" title="1">{
+        ret := uint32(C.wasm_memory_size(m.ptr()))
+        runtime.KeepAlive(m)
+        return ret
+}</span>
+
+// Grows this memory by `delta` pages
+func (m *Memory) Grow(delta uint) bool <span class="cov8" title="1">{
+        ret := C.wasm_memory_grow(m.ptr(), C.wasm_memory_pages_t(delta))
+        runtime.KeepAlive(m)
+        return bool(ret)
+}</span>
+
+func (m *Memory) AsExtern() *Extern <span class="cov8" title="1">{
+        ptr := C.wasm_memory_as_extern(m.ptr())
+        return mkExtern(ptr, m.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+type MemoryType struct {
+        _ptr   *C.wasm_memorytype_t
+        _owner interface{}
+}
+
+// Creates a new `MemoryType` with the `limits` on size provided
+func NewMemoryType(limits Limits) *MemoryType <span class="cov8" title="1">{
+        limits_ffi := limits.ffi()
+        ptr := C.wasm_memorytype_new(&amp;limits_ffi)
+        return mkMemoryType(ptr, nil)
+}</span>
+
+func mkMemoryType(ptr *C.wasm_memorytype_t, owner interface{}) *MemoryType <span class="cov8" title="1">{
+        memorytype := &amp;MemoryType{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(memorytype, func(memorytype *MemoryType) </span><span class="cov8" title="1">{
+                        C.wasm_memorytype_delete(memorytype._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return memorytype</span>
+}
+
+func (ty *MemoryType) ptr() *C.wasm_memorytype_t <span class="cov8" title="1">{
+        ret := ty._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (ty *MemoryType) owner() interface{} <span class="cov8" title="1">{
+        if ty._owner != nil </span><span class="cov8" title="1">{
+                return ty._owner
+        }</span>
+        <span class="cov8" title="1">return ty</span>
+}
+
+// Returns the limits on the size of this memory type
+func (ty *MemoryType) Limits() Limits <span class="cov8" title="1">{
+        ptr := C.wasm_memorytype_limits(ty.ptr())
+        return mkLimits(ptr, ty.owner())
+}</span>
+
+// Converts this type to an instance of `ExternType`
+func (ty *MemoryType) AsExternType() *ExternType <span class="cov8" title="1">{
+        ptr := C.wasm_memorytype_as_externtype_const(ty.ptr())
+        return mkExternType(ptr, ty.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package wasmtime
+
+// #include &lt;wasmtime.h&gt;
+//
+// wasmtime_error_t *go_module_new(wasm_store_t *store, uint8_t *bytes, size_t len, wasm_module_t **ret) {
+//    wasm_byte_vec_t vec;
+//    vec.data = bytes;
+//    vec.size = len;
+//    return wasmtime_module_new(store, &amp;vec, ret);
+// }
+//
+// wasmtime_error_t *go_module_validate(wasm_store_t *store, uint8_t *bytes, size_t len) {
+//    wasm_byte_vec_t vec;
+//    vec.data = bytes;
+//    vec.size = len;
+//    return wasmtime_module_validate(store, &amp;vec);
+// }
+import "C"
+import (
+        "io/ioutil"
+        "runtime"
+        "unsafe"
+)
+
+type Module struct {
+        _ptr  *C.wasm_module_t
+        Store *Store
+}
+
+// Compiles a new `Module` from the `wasm` provided with the given configuration
+// in `store`.
+func NewModule(store *Store, wasm []byte) (*Module, error) <span class="cov8" title="1">{
+        // We can't create the `wasm_byte_vec_t` here and pass it in because
+        // that runs into the error of "passed a pointer to a pointer" because
+        // the vec itself is passed by pointer and it contains a pointer to
+        // `wasm`. To work around this we insert some C shims above and call
+        // them.
+        var wasm_ptr *C.uint8_t
+        if len(wasm) &gt; 0 </span><span class="cov8" title="1">{
+                wasm_ptr = (*C.uint8_t)(unsafe.Pointer(&amp;wasm[0]))
+        }</span>
+        <span class="cov8" title="1">var ptr *C.wasm_module_t
+        err := C.go_module_new(store.ptr(), wasm_ptr, C.size_t(len(wasm)), &amp;ptr)
+        runtime.KeepAlive(store)
+        runtime.KeepAlive(wasm)
+
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, mkError(err)
+        }</span> else<span class="cov8" title="1"> {
+                return mkModule(ptr, store), nil
+        }</span>
+}
+
+// Reads the contents of the `file` provided and interprets them as either the
+// text format or the binary format for WebAssembly.
+//
+// Afterwards delegates to the `NewModule` constructor with the contents read.
+func NewModuleFromFile(store *Store, file string) (*Module, error) <span class="cov0" title="0">{
+        wasm, err := ioutil.ReadFile(file)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        // If this wasm isn't actually wasm, treat it as the text format and
+        // parse it as such.
+        <span class="cov0" title="0">if len(wasm) &gt; 0 &amp;&amp; wasm[0] != 0 </span><span class="cov0" title="0">{
+                wasm, err = Wat2Wasm(string(wasm))
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        }
+        <span class="cov0" title="0">return NewModule(store, wasm)</span>
+
+}
+
+// Validates whether `wasm` would be a valid wasm module according to the
+// configuration in `store`
+func ModuleValidate(store *Store, wasm []byte) error <span class="cov8" title="1">{
+        var wasm_ptr *C.uint8_t
+        if len(wasm) &gt; 0 </span><span class="cov8" title="1">{
+                wasm_ptr = (*C.uint8_t)(unsafe.Pointer(&amp;wasm[0]))
+        }</span>
+        <span class="cov8" title="1">err := C.go_module_validate(store.ptr(), wasm_ptr, C.size_t(len(wasm)))
+        runtime.KeepAlive(store)
+        runtime.KeepAlive(wasm)
+        if err == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span> else<span class="cov8" title="1"> {
+                return mkError(err)
+        }</span>
+}
+
+func mkModule(ptr *C.wasm_module_t, store *Store) *Module <span class="cov8" title="1">{
+        module := &amp;Module{_ptr: ptr, Store: store}
+        runtime.SetFinalizer(module, func(module *Module) </span><span class="cov0" title="0">{
+                C.wasm_module_delete(module._ptr)
+        }</span>)
+        <span class="cov8" title="1">return module</span>
+}
+
+func (m *Module) ptr() *C.wasm_module_t <span class="cov8" title="1">{
+        ret := m._ptr
+        maybeGC()
+        return ret
+}</span>
+
+type importTypeList struct {
+        vec C.wasm_importtype_vec_t
+}
+
+// Returns a list of `ImportType` items which are the items imported by this
+// module and are required for instantiation.
+func (m *Module) Imports() []*ImportType <span class="cov8" title="1">{
+        imports := &amp;importTypeList{}
+        C.wasm_module_imports(m.ptr(), &amp;imports.vec)
+        runtime.KeepAlive(m)
+        runtime.SetFinalizer(imports, func(imports *importTypeList) </span><span class="cov0" title="0">{
+                C.wasm_importtype_vec_delete(&amp;imports.vec)
+        }</span>)
+
+        <span class="cov8" title="1">ret := make([]*ImportType, int(imports.vec.size))
+        base := unsafe.Pointer(imports.vec.data)
+        var ptr *C.wasm_importtype_t
+        for i := 0; i &lt; int(imports.vec.size); i++ </span><span class="cov8" title="1">{
+                ptr := *(**C.wasm_importtype_t)(unsafe.Pointer(uintptr(base) + unsafe.Sizeof(ptr)*uintptr(i)))
+                ty := mkImportType(ptr, imports)
+                ret[i] = ty
+        }</span>
+        <span class="cov8" title="1">return ret</span>
+}
+
+type exportTypeList struct {
+        vec C.wasm_exporttype_vec_t
+}
+
+// Returns a list of `ExportType` items which are the items that will
+// be exported by this module after instantiation.
+func (m *Module) Exports() []*ExportType <span class="cov8" title="1">{
+        exports := &amp;exportTypeList{}
+        C.wasm_module_exports(m.ptr(), &amp;exports.vec)
+        runtime.KeepAlive(m)
+        runtime.SetFinalizer(exports, func(exports *exportTypeList) </span><span class="cov0" title="0">{
+                C.wasm_exporttype_vec_delete(&amp;exports.vec)
+        }</span>)
+
+        <span class="cov8" title="1">ret := make([]*ExportType, int(exports.vec.size))
+        base := unsafe.Pointer(exports.vec.data)
+        var ptr *C.wasm_exporttype_t
+        for i := 0; i &lt; int(exports.vec.size); i++ </span><span class="cov8" title="1">{
+                ptr := *(**C.wasm_exporttype_t)(unsafe.Pointer(uintptr(base) + unsafe.Sizeof(ptr)*uintptr(i)))
+                ty := mkExportType(ptr, exports)
+                ret[i] = ty
+        }</span>
+        <span class="cov8" title="1">return ret</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package wasmtime
+
+type slab struct {
+        list []int
+        next int
+}
+
+func (s *slab) allocate() int <span class="cov8" title="1">{
+        if s.next == len(s.list) </span><span class="cov8" title="1">{
+                s.list = append(s.list, s.next)
+        }</span>
+        <span class="cov8" title="1">ret := s.next
+        s.next = s.list[ret]
+        return ret</span>
+}
+
+func (s *slab) deallocate(slot int) <span class="cov8" title="1">{
+        s.list[slot] = s.next
+        s.next = slot
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+// A `Store` is a general group of wasm instances, and many objects
+// must all be created with and reference the same `Store`
+type Store struct {
+        _ptr *C.wasm_store_t
+}
+
+// Creates a new `Store` from the configuration provided in `engine`
+func NewStore(engine *Engine) *Store <span class="cov8" title="1">{
+        store := &amp;Store{_ptr: C.wasm_store_new(engine.ptr())}
+        runtime.KeepAlive(engine)
+        runtime.SetFinalizer(store, func(store *Store) </span><span class="cov8" title="1">{
+                C.wasm_store_delete(store._ptr)
+        }</span>)
+        <span class="cov8" title="1">return store</span>
+}
+
+func (store *Store) ptr() *C.wasm_store_t <span class="cov8" title="1">{
+        ret := store._ptr
+        maybeGC()
+        return ret
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+type Table struct {
+        _ptr   *C.wasm_table_t
+        _owner interface{}
+}
+
+func mkTable(ptr *C.wasm_table_t, owner interface{}) *Table <span class="cov8" title="1">{
+        f := &amp;Table{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov0" title="0">{
+                runtime.SetFinalizer(f, func(f *Table) </span><span class="cov0" title="0">{
+                        C.wasm_table_delete(f._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return f</span>
+}
+
+func (t *Table) ptr() *C.wasm_table_t <span class="cov8" title="1">{
+        ret := t._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (t *Table) owner() interface{} <span class="cov8" title="1">{
+        if t._owner != nil </span><span class="cov8" title="1">{
+                return t._owner
+        }</span>
+        <span class="cov0" title="0">return t</span>
+}
+
+func (t *Table) Size() uint32 <span class="cov0" title="0">{
+        ret := C.wasm_table_size(t.ptr())
+        runtime.KeepAlive(t)
+        return uint32(ret)
+}</span>
+
+func (t *Table) Type() *TableType <span class="cov8" title="1">{
+        ptr := C.wasm_table_type(t.ptr())
+        runtime.KeepAlive(t)
+        return mkTableType(ptr, nil)
+}</span>
+
+func (t *Table) AsExtern() *Extern <span class="cov8" title="1">{
+        ptr := C.wasm_table_as_extern(t.ptr())
+        return mkExtern(ptr, t.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+type TableType struct {
+        _ptr   *C.wasm_tabletype_t
+        _owner interface{}
+}
+
+// Creates a new `TableType` with the `element` type provided as well as
+// `limits` on its size.
+func NewTableType(element *ValType, limits Limits) *TableType <span class="cov8" title="1">{
+        valptr := C.wasm_valtype_new(C.wasm_valtype_kind(element.ptr()))
+        runtime.KeepAlive(element)
+        limits_ffi := limits.ffi()
+        ptr := C.wasm_tabletype_new(valptr, &amp;limits_ffi)
+
+        return mkTableType(ptr, nil)
+}</span>
+
+func mkTableType(ptr *C.wasm_tabletype_t, owner interface{}) *TableType <span class="cov8" title="1">{
+        tabletype := &amp;TableType{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(tabletype, func(tabletype *TableType) </span><span class="cov0" title="0">{
+                        C.wasm_tabletype_delete(tabletype._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return tabletype</span>
+}
+
+func (ty *TableType) ptr() *C.wasm_tabletype_t <span class="cov8" title="1">{
+        ret := ty._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (ty *TableType) owner() interface{} <span class="cov8" title="1">{
+        if ty._owner != nil </span><span class="cov8" title="1">{
+                return ty._owner
+        }</span>
+        <span class="cov8" title="1">return ty</span>
+}
+
+// Returns the type of value stored in this table
+func (ty *TableType) Element() *ValType <span class="cov8" title="1">{
+        ptr := C.wasm_tabletype_element(ty.ptr())
+        return mkValType(ptr, ty.owner())
+}</span>
+
+// Returns limits on the size of this table type
+func (ty *TableType) Limits() Limits <span class="cov8" title="1">{
+        ptr := C.wasm_tabletype_limits(ty.ptr())
+        return mkLimits(ptr, ty.owner())
+}</span>
+
+// Converts this type to an instance of `ExternType`
+func (ty *TableType) AsExternType() *ExternType <span class="cov8" title="1">{
+        ptr := C.wasm_tabletype_as_externtype_const(ty.ptr())
+        return mkExternType(ptr, ty.owner())
+}</span>
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package wasmtime
+
+// #include &lt;stdlib.h&gt;
+// #include &lt;wasm.h&gt;
+// #include &lt;wasmtime.h&gt;
+import "C"
+import "fmt"
+import "runtime"
+import "unsafe"
+
+type Trap struct {
+        _ptr *C.wasm_trap_t
+}
+
+type Frame struct {
+        _ptr   *C.wasm_frame_t
+        _owner interface{}
+}
+
+// Creates a new `Trap` with the `name` and the type provided.
+func NewTrap(store *Store, message string) *Trap <span class="cov8" title="1">{
+        cs := C.CString(message)
+        message_vec := C.wasm_byte_vec_t{
+                data: cs,
+                size: C.size_t(len(message) + 1),
+        }
+        ptr := C.wasm_trap_new(store.ptr(), &amp;message_vec)
+        C.free(unsafe.Pointer(cs))
+        runtime.KeepAlive(store)
+        return mkTrap(ptr)
+}</span>
+
+func mkTrap(ptr *C.wasm_trap_t) *Trap <span class="cov8" title="1">{
+        trap := &amp;Trap{_ptr: ptr}
+        runtime.SetFinalizer(trap, func(trap *Trap) </span><span class="cov8" title="1">{
+                C.wasm_trap_delete(trap._ptr)
+        }</span>)
+        <span class="cov8" title="1">return trap</span>
+}
+
+func (t *Trap) ptr() *C.wasm_trap_t <span class="cov8" title="1">{
+        ret := t._ptr
+        maybeGC()
+        return ret
+}</span>
+
+// Returns the name in the module this export type is exporting
+func (t *Trap) Message() string <span class="cov8" title="1">{
+        message := C.wasm_byte_vec_t{}
+        C.wasm_trap_message(t.ptr(), &amp;message)
+        ret := C.GoStringN(message.data, C.int(message.size-1))
+        runtime.KeepAlive(t)
+        C.wasm_byte_vec_delete(&amp;message)
+        return ret
+}</span>
+
+func (t *Trap) Error() string <span class="cov8" title="1">{
+        base := t.Message()
+        frames := t.Frames()
+        if len(frames) == 0 </span><span class="cov0" title="0">{
+                return base
+        }</span>
+        <span class="cov8" title="1">base += "\nwasm backtrace:\n"
+        for i, frame := range frames </span><span class="cov8" title="1">{
+                module_name := unwrapStrOr(frame.ModuleName(), "&lt;unknown&gt;")
+                default_name := fmt.Sprintf("&lt;wasm function %d&gt;", frame.FuncIndex())
+                func_name := unwrapStrOr(frame.FuncName(), default_name)
+                base += fmt.Sprintf("  %d: %s!%s\n", i, module_name, func_name)
+        }</span>
+        <span class="cov8" title="1">return base</span>
+}
+
+func unwrapStrOr(s *string, other string) string <span class="cov8" title="1">{
+        if s == nil </span><span class="cov8" title="1">{
+                return other
+        }</span> else<span class="cov8" title="1"> {
+                return *s
+        }</span>
+}
+
+type frameList struct {
+        vec C.wasm_frame_vec_t
+}
+
+// Returns the wasm function frames that make up this trap
+func (t *Trap) Frames() []*Frame <span class="cov8" title="1">{
+        frames := &amp;frameList{}
+        C.wasm_trap_trace(t.ptr(), &amp;frames.vec)
+        runtime.KeepAlive(t)
+        runtime.SetFinalizer(frames, func(frames *frameList) </span><span class="cov0" title="0">{
+                C.wasm_frame_vec_delete(&amp;frames.vec)
+        }</span>)
+
+        <span class="cov8" title="1">ret := make([]*Frame, int(frames.vec.size))
+        base := unsafe.Pointer(frames.vec.data)
+        var ptr *C.wasm_frame_t
+        for i := 0; i &lt; int(frames.vec.size); i++ </span><span class="cov8" title="1">{
+                ptr := *(**C.wasm_frame_t)(unsafe.Pointer(uintptr(base) + unsafe.Sizeof(ptr)*uintptr(i)))
+                ret[i] = &amp;Frame{
+                        _ptr:   ptr,
+                        _owner: frames,
+                }
+        }</span>
+        <span class="cov8" title="1">return ret</span>
+}
+
+func (f *Frame) ptr() *C.wasm_frame_t <span class="cov8" title="1">{
+        ret := f._ptr
+        maybeGC()
+        return ret
+}</span>
+
+// Returns the function index in the wasm module that this frame represents
+func (f *Frame) FuncIndex() uint32 <span class="cov8" title="1">{
+        ret := C.wasm_frame_func_index(f.ptr())
+        runtime.KeepAlive(f)
+        return uint32(ret)
+}</span>
+
+// Returns the name, if available, for this frame's function
+func (f *Frame) FuncName() *string <span class="cov8" title="1">{
+        ret := C.wasmtime_frame_func_name(f.ptr())
+        if ret == nil </span><span class="cov8" title="1">{
+                runtime.KeepAlive(f)
+                return nil
+        }</span>
+        <span class="cov8" title="1">str := C.GoStringN(ret.data, C.int(ret.size))
+        runtime.KeepAlive(f)
+        return &amp;str</span>
+}
+
+// Returns the name, if available, for this frame's module
+func (f *Frame) ModuleName() *string <span class="cov8" title="1">{
+        ret := C.wasmtime_frame_module_name(f.ptr())
+        if ret == nil </span><span class="cov8" title="1">{
+                runtime.KeepAlive(f)
+                return nil
+        }</span>
+        <span class="cov8" title="1">str := C.GoStringN(ret.data, C.int(ret.size))
+        runtime.KeepAlive(f)
+        return &amp;str</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+//
+// void go_init_i32(wasm_val_t *val, int32_t i) { val-&gt;of.i32 = i; }
+// void go_init_i64(wasm_val_t *val, int64_t i) { val-&gt;of.i64 = i; }
+// void go_init_f32(wasm_val_t *val, float i) { val-&gt;of.f32 = i; }
+// void go_init_f64(wasm_val_t *val, double i) { val-&gt;of.f64 = i; }
+//
+// int32_t go_get_i32(wasm_val_t *val) { return val-&gt;of.i32; }
+// int64_t go_get_i64(wasm_val_t *val) { return val-&gt;of.i64; }
+// float go_get_f32(wasm_val_t *val) { return val-&gt;of.f32; }
+// double go_get_f64(wasm_val_t *val) { return val-&gt;of.f64; }
+import "C"
+
+type Val struct {
+        raw C.wasm_val_t
+}
+
+func ValI32(val int32) Val <span class="cov8" title="1">{
+        ret := Val{raw: C.wasm_val_t{kind: C.WASM_I32}}
+        C.go_init_i32(&amp;ret.raw, C.int32_t(val))
+        return ret
+}</span>
+
+func ValI64(val int64) Val <span class="cov8" title="1">{
+        ret := Val{raw: C.wasm_val_t{kind: C.WASM_I64}}
+        C.go_init_i64(&amp;ret.raw, C.int64_t(val))
+        return ret
+}</span>
+
+func ValF32(val float32) Val <span class="cov8" title="1">{
+        ret := Val{raw: C.wasm_val_t{kind: C.WASM_F32}}
+        C.go_init_f32(&amp;ret.raw, C.float(val))
+        return ret
+}</span>
+
+func ValF64(val float64) Val <span class="cov8" title="1">{
+        ret := Val{raw: C.wasm_val_t{kind: C.WASM_F64}}
+        C.go_init_f64(&amp;ret.raw, C.double(val))
+        return ret
+}</span>
+
+// Returns the kind of value that this `Val` contains.
+func (v Val) Kind() ValKind <span class="cov8" title="1">{
+        return ValKind(v.raw.kind)
+}</span>
+
+// Returns the underlying 32-bit integer if this is an `i32`, or panics.
+func (v Val) I32() int32 <span class="cov8" title="1">{
+        if v.Kind() != KindI32 </span><span class="cov0" title="0">{
+                panic("not an i32")</span>
+        }
+        <span class="cov8" title="1">return int32(C.go_get_i32(&amp;v.raw))</span>
+}
+
+// Returns the underlying 64-bit integer if this is an `i64`, or panics.
+func (v Val) I64() int64 <span class="cov8" title="1">{
+        if v.Kind() != KindI64 </span><span class="cov0" title="0">{
+                panic("not an i64")</span>
+        }
+        <span class="cov8" title="1">return int64(C.go_get_i64(&amp;v.raw))</span>
+}
+
+// Returns the underlying 32-bit float if this is an `f32`, or panics.
+func (v Val) F32() float32 <span class="cov8" title="1">{
+        if v.Kind() != KindF32 </span><span class="cov0" title="0">{
+                panic("not an f32")</span>
+        }
+        <span class="cov8" title="1">return float32(C.go_get_f32(&amp;v.raw))</span>
+}
+
+// Returns the underlying 64-bit float if this is an `f64`, or panics.
+func (v Val) F64() float64 <span class="cov8" title="1">{
+        if v.Kind() != KindF64 </span><span class="cov0" title="0">{
+                panic("not an f64")</span>
+        }
+        <span class="cov8" title="1">return float64(C.go_get_f64(&amp;v.raw))</span>
+}
+
+// Returns the underlying 64-bit float if this is an `f64`, or panics.
+func (v Val) Get() interface{} <span class="cov8" title="1">{
+        switch v.Kind() </span>{
+        case KindI32:<span class="cov8" title="1">
+                return v.I32()</span>
+        case KindI64:<span class="cov8" title="1">
+                return v.I64()</span>
+        case KindF32:<span class="cov8" title="1">
+                return v.F32()</span>
+        case KindF64:<span class="cov8" title="1">
+                return v.F64()</span>
+        }
+        <span class="cov0" title="0">panic("failed to get value of `Val`")</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package wasmtime
+
+// #include &lt;wasm.h&gt;
+import "C"
+import "runtime"
+
+// Enumeration of different kinds of value types
+type ValKind C.wasm_valkind_t
+
+const (
+        KindI32     ValKind = C.WASM_I32
+        KindI64     ValKind = C.WASM_I64
+        KindF32     ValKind = C.WASM_F32
+        KindF64     ValKind = C.WASM_F64
+        KindAnyref  ValKind = C.WASM_ANYREF
+        KindFuncref ValKind = C.WASM_FUNCREF
+)
+
+// Renders this kind as a string, similar to the `*.wat` format
+func (ty ValKind) String() string <span class="cov0" title="0">{
+        switch ty </span>{
+        case KindI32:<span class="cov0" title="0">
+                return "i32"</span>
+        case KindI64:<span class="cov0" title="0">
+                return "i64"</span>
+        case KindF32:<span class="cov0" title="0">
+                return "f32"</span>
+        case KindF64:<span class="cov0" title="0">
+                return "f64"</span>
+        case KindAnyref:<span class="cov0" title="0">
+                return "anyref"</span>
+        case KindFuncref:<span class="cov0" title="0">
+                return "funcref"</span>
+        }
+        <span class="cov0" title="0">panic("unknown kind")</span>
+}
+
+type ValType struct {
+        _ptr   *C.wasm_valtype_t
+        _owner interface{}
+}
+
+// Creates a new `ValType` with the `kind` provided
+func NewValType(kind ValKind) *ValType <span class="cov8" title="1">{
+        ptr := C.wasm_valtype_new(C.wasm_valkind_t(kind))
+        return mkValType(ptr, nil)
+}</span>
+
+func mkValType(ptr *C.wasm_valtype_t, owner interface{}) *ValType <span class="cov8" title="1">{
+        valtype := &amp;ValType{_ptr: ptr, _owner: owner}
+        if owner == nil </span><span class="cov8" title="1">{
+                runtime.SetFinalizer(valtype, func(valtype *ValType) </span><span class="cov8" title="1">{
+                        C.wasm_valtype_delete(valtype._ptr)
+                }</span>)
+        }
+        <span class="cov8" title="1">return valtype</span>
+}
+
+// Returns the corresponding `ValKind` for this `ValType`
+func (ty *ValType) Kind() ValKind <span class="cov8" title="1">{
+        ret := ValKind(C.wasm_valtype_kind(ty.ptr()))
+        runtime.KeepAlive(ty)
+        return ret
+}</span>
+
+// Converts this `ValType` into a string according to the string representation
+// of `ValKind`.
+func (ty *ValType) String() string <span class="cov0" title="0">{
+        return ty.Kind().String()
+}</span>
+
+func (valtype *ValType) ptr() *C.wasm_valtype_t <span class="cov8" title="1">{
+        ret := valtype._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (ty *ValType) owner() interface{} <span class="cov0" title="0">{
+        if ty._owner != nil </span><span class="cov0" title="0">{
+                return ty._owner
+        }</span>
+        <span class="cov0" title="0">return ty</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package wasmtime
+
+// #include &lt;wasi.h&gt;
+// #include &lt;stdlib.h&gt;
+import "C"
+import "errors"
+import "runtime"
+import "unsafe"
+
+type WasiConfig struct {
+        _ptr *C.wasi_config_t
+}
+
+func NewWasiConfig() *WasiConfig <span class="cov0" title="0">{
+        ptr := C.wasi_config_new()
+        config := &amp;WasiConfig{_ptr: ptr}
+        runtime.SetFinalizer(config, func(config *WasiConfig) </span><span class="cov0" title="0">{
+                C.wasi_config_delete(config._ptr)
+        }</span>)
+        <span class="cov0" title="0">return config</span>
+}
+
+func (c *WasiConfig) ptr() *C.wasi_config_t <span class="cov0" title="0">{
+        ret := c._ptr
+        maybeGC()
+        return ret
+}</span>
+
+func (c *WasiConfig) SetArgv(argv []string) <span class="cov0" title="0">{
+        ptrs := make([]*C.char, len(argv))
+        for i, arg := range argv </span><span class="cov0" title="0">{
+                ptrs[i] = C.CString(arg)
+        }</span>
+        <span class="cov0" title="0">var argv_raw **C.char
+        if len(ptrs) &gt; 0 </span><span class="cov0" title="0">{
+                argv_raw = &amp;ptrs[0]
+        }</span>
+        <span class="cov0" title="0">C.wasi_config_set_argv(c.ptr(), C.int(len(argv)), argv_raw)
+        runtime.KeepAlive(c)
+        for _, ptr := range ptrs </span><span class="cov0" title="0">{
+                C.free(unsafe.Pointer(ptr))
+        }</span>
+}
+
+func (c *WasiConfig) InheritArgv() <span class="cov0" title="0">{
+        C.wasi_config_inherit_argv(c.ptr())
+        runtime.KeepAlive(c)
+}</span>
+
+func (c *WasiConfig) SetEnv(keys, values []string) <span class="cov0" title="0">{
+        if len(keys) != len(values) </span><span class="cov0" title="0">{
+                panic("mismatched numbers of keys and values")</span>
+        }
+        <span class="cov0" title="0">name_ptrs := make([]*C.char, len(values))
+        value_ptrs := make([]*C.char, len(values))
+        for i, key := range keys </span><span class="cov0" title="0">{
+                name_ptrs[i] = C.CString(key)
+        }</span>
+        <span class="cov0" title="0">for i, value := range values </span><span class="cov0" title="0">{
+                name_ptrs[i] = C.CString(value)
+        }</span>
+        <span class="cov0" title="0">var names_raw, values_raw **C.char
+        if len(keys) &gt; 0 </span><span class="cov0" title="0">{
+                names_raw = &amp;name_ptrs[0]
+                values_raw = &amp;value_ptrs[0]
+        }</span>
+        <span class="cov0" title="0">C.wasi_config_set_env(c.ptr(), C.int(len(keys)), names_raw, values_raw)
+        runtime.KeepAlive(c)
+        for i, ptr := range name_ptrs </span><span class="cov0" title="0">{
+                C.free(unsafe.Pointer(ptr))
+                C.free(unsafe.Pointer(value_ptrs[i]))
+        }</span>
+}
+
+func (c *WasiConfig) InheritEnv() <span class="cov0" title="0">{
+        C.wasi_config_inherit_env(c.ptr())
+        runtime.KeepAlive(c)
+}</span>
+
+func (c *WasiConfig) SetStdinFile(path string) error <span class="cov0" title="0">{
+        path_c := C.CString(path)
+        ok := C.wasi_config_set_stdin_file(c.ptr(), path_c)
+        runtime.KeepAlive(c)
+        C.free(unsafe.Pointer(path_c))
+        if ok </span><span class="cov0" title="0">{
+                return nil
+        }</span> else<span class="cov0" title="0"> {
+                return errors.New("failed to open file")
+        }</span>
+}
+
+func (c *WasiConfig) InheritStdin() <span class="cov0" title="0">{
+        C.wasi_config_inherit_stdin(c.ptr())
+        runtime.KeepAlive(c)
+}</span>
+
+func (c *WasiConfig) SetStdoutFile(path string) error <span class="cov0" title="0">{
+        path_c := C.CString(path)
+        ok := C.wasi_config_set_stdout_file(c.ptr(), path_c)
+        runtime.KeepAlive(c)
+        C.free(unsafe.Pointer(path_c))
+        if ok </span><span class="cov0" title="0">{
+                return nil
+        }</span> else<span class="cov0" title="0"> {
+                return errors.New("failed to open file")
+        }</span>
+}
+
+func (c *WasiConfig) InheritStdout() <span class="cov0" title="0">{
+        C.wasi_config_inherit_stdout(c.ptr())
+        runtime.KeepAlive(c)
+}</span>
+
+func (c *WasiConfig) SetStderrFile(path string) error <span class="cov0" title="0">{
+        path_c := C.CString(path)
+        ok := C.wasi_config_set_stderr_file(c.ptr(), path_c)
+        runtime.KeepAlive(c)
+        C.free(unsafe.Pointer(path_c))
+        if ok </span><span class="cov0" title="0">{
+                return nil
+        }</span> else<span class="cov0" title="0"> {
+                return errors.New("failed to open file")
+        }</span>
+}
+
+func (c *WasiConfig) InheritStderr() <span class="cov0" title="0">{
+        C.wasi_config_inherit_stderr(c.ptr())
+        runtime.KeepAlive(c)
+}</span>
+
+func (c *WasiConfig) PreopenDir(path, guest_path string) error <span class="cov0" title="0">{
+        path_c := C.CString(path)
+        guest_path_c := C.CString(guest_path)
+        ok := C.wasi_config_preopen_dir(c.ptr(), path_c, guest_path_c)
+        runtime.KeepAlive(c)
+        C.free(unsafe.Pointer(path_c))
+        C.free(unsafe.Pointer(guest_path_c))
+        if ok </span><span class="cov0" title="0">{
+                return nil
+        }</span> else<span class="cov0" title="0"> {
+                return errors.New("failed to preopen directory")
+        }</span>
+}
+
+type WasiInstance struct {
+        _ptr *C.wasi_instance_t
+}
+
+// Creates a new instance of WASI with the given configuration.
+//
+// The version of WASI must be explicitly requested via `name`.
+func NewWasiInstance(store *Store, config *WasiConfig, name string) (*WasiInstance, error) <span class="cov0" title="0">{
+        if config._ptr == nil </span><span class="cov0" title="0">{
+                panic("config already used to create wasi instance")</span>
+        }
+        <span class="cov0" title="0">var trap *C.wasm_trap_t
+        name_ptr := C.CString(name)
+        ptr := C.wasi_instance_new(
+                store.ptr(),
+                name_ptr,
+                config.ptr(),
+                &amp;trap,
+        )
+        runtime.KeepAlive(store)
+        config._ptr = nil
+        C.free(unsafe.Pointer(name_ptr))
+
+        if ptr == nil </span><span class="cov0" title="0">{
+                if trap != nil </span><span class="cov0" title="0">{
+                        return nil, mkTrap(trap)
+                }</span>
+                <span class="cov0" title="0">return nil, errors.New("failed to create instance")</span>
+        }
+
+        <span class="cov0" title="0">instance := &amp;WasiInstance{_ptr: ptr}
+        runtime.SetFinalizer(instance, func(instance *WasiInstance) </span><span class="cov0" title="0">{
+                C.wasi_instance_delete(instance._ptr)
+        }</span>)
+        <span class="cov0" title="0">return instance, nil</span>
+}
+
+func (i *WasiInstance) ptr() *C.wasi_instance_t <span class="cov0" title="0">{
+        ret := i._ptr
+        maybeGC()
+        return ret
+}</span>
+
+// Attempts to bind the `imp` import provided, returning an Extern suitable for
+// satisfying the import if one can be found.
+//
+// If `imp` isn't defined by this instance of WASI then `nil` is returned.
+func (i *WasiInstance) BindImport(imp *ImportType) *Extern <span class="cov0" title="0">{
+        ret := C.wasi_instance_bind_import(i.ptr(), imp.ptr())
+        runtime.KeepAlive(i)
+        runtime.KeepAlive(imp)
+        if ret == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span> else<span class="cov0" title="0"> {
+                return mkExtern(ret, nil)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package wasmtime
+
+// #include &lt;wasmtime.h&gt;
+//
+// wasmtime_error_t *go_wat2wasm(
+//  char *wat_ptr,
+//  size_t wat_len,
+//  wasm_byte_vec_t *ret
+// ) {
+//   wasm_byte_vec_t wat;
+//   wat.data = wat_ptr;
+//   wat.size = wat_len;
+//   return wasmtime_wat2wasm(&amp;wat, ret);
+// }
+import "C"
+import "runtime"
+import "unsafe"
+
+// Converts the text format of WebAssembly to the binary format.
+//
+// Takes the text format in-memory as input, and returns either the binary
+// encoding of the text format or an error if parsing fails.
+func Wat2Wasm(wat string) ([]byte, error) <span class="cov8" title="1">{
+        ret_vec := C.wasm_byte_vec_t{}
+        err := C.go_wat2wasm(
+                C._GoStringPtr(wat),
+                C._GoStringLen(wat),
+                &amp;ret_vec,
+        )
+        runtime.KeepAlive(wat)
+
+        if err == nil </span><span class="cov8" title="1">{
+                ret := C.GoBytes(unsafe.Pointer(ret_vec.data), C.int(ret_vec.size))
+                C.wasm_byte_vec_delete(&amp;ret_vec)
+                return ret, nil
+        }</span> else<span class="cov8" title="1"> {
+                return nil, mkError(err)
+        }</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
