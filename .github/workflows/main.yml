@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [main]
+    branches: [test]
   pull_request:
-    branches: [main]
+    branches: [test]
   schedule:
     - cron: '0 0 * * *' # run at 00:00 UTC
 
@@ -30,11 +30,17 @@ jobs:
       with:
         go-version: ${{ matrix.go }}
     - run: go vet
+      env:
+        GODEBUG: asyncpreemptoff=1
     - run: go test
-    - run: go test -tags debug
+      env:
+        GODEBUG: asyncpreemptoff=1
     - run: go test -tags debug
       env:
-        GODEBUG: cgocheck=2
+        GODEBUG: asyncpreemptoff=1
+    - run: go test -tags debug
+      env:
+        GODEBUG: cgocheck=2,asyncpreemptoff=1
         GOGC: 1
     # - name: Test bazel build on *nix
     #   shell: bash
