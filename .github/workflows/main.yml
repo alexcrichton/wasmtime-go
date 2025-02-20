@@ -1,17 +1,7 @@
 name: CI
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  schedule:
-    - cron: '0 0 * * *' # run at 00:00 UTC
-
-# Cancel any in-flight jobs for the same PR/branch so there's only one active
-# at a time
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    branches: [bisect]
 
 jobs:
   build:
@@ -19,117 +9,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-2025]
-        go: ['1.20.x', '1.21.x']
+        os: [windows-2022]
+        go: ['1.20.x', '1.21.x', '1.22.x', '1.23.x', '1.24.x']
     steps:
     - uses: actions/checkout@v4
-
-    # first download wasmtime's last static library build using python
-    - uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - run: python ci/download-wasmtime.py
 
     # then run our go tests ...
     - uses: actions/setup-go@v2
       with:
         go-version: ${{ matrix.go }}
-    - run: go vet
     - run: go test
-    - run: go test -tags debug
-    - run: go test -tags debug
-      env:
-        GODEBUG: cgocheck=1
-        GOGC: 1
-    - run: go clean -cache
-    - name: Test bazel build on *nix
-      shell: bash
-      run: |
-        export GOOS=$(go env GOHOSTOS)
-        go get github.com/bazelbuild/bazelisk
-        export PATH=$PATH:$(go env GOPATH)/bin
-        bazelisk build --subcommands=pretty_print --verbose_failures :go_default_library
-        bazelisk test --subcommands=pretty_print --verbose_failures :go_default_test
-      # TODO: need to fix bazel tests
-      if: runner.os != 'Windows' && false
-    - name: Ready msys2
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: MINGW64
-        update: true
-        install: git mingw-w64-x86_64-toolchain
-        path-type: inherit
-      if: runner.os == 'Windows'
-    - name: Test bazel build on Windows
-      shell: msys2 {0}
-      run: |
-        go get github.com/bazelbuild/bazelisk
-        bazelisk build --subcommands=pretty_print --verbose_failures --compiler=mingw-gcc :go_default_library
-        bazelisk test --subcommands=pretty_print --verbose_failures --compiler=mingw-gcc :go_default_test
-      # TODO: need to reenable when MinGW shenanigans are fixed
-      if: runner.os == 'Windows' && false
-    - name: Test vendoring on *nix
-      shell: bash
-      run: ./ci/test-vendoring.sh
-      if: runner.os != 'Windows'
-
-  coverage:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - run: python ci/download-wasmtime.py
-    - uses: actions/setup-go@v2
-      with:
-        go-version: '1.20'
-    - run: go test -coverprofile cover.out ./...
-    - run: go tool cover -html=cover.out -o coverage.html
-    - uses: actions/upload-artifact@v4
-      with:
-        name: coverage
-        path: coverage.html
-
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-go@v2
-      with:
-        go-version: '1.20'
-    # https://stackoverflow.com/questions/42510140/check-format-for-continous-integration
-    - run: "diff -u <(echo -n) <(gofmt -d ./)"
-
-  upload_docs:
-    needs: [coverage]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v4
-      with:
-        name: coverage
-        path: coverage
-    - run: find .
-
-    - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: actions/configure-pages@v5
-    - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: "coverage"
-
-  deploy:
-    name: Deploy github-pages
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: upload_docs
-    permissions:
-      pages: write
-      id-token: write
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
