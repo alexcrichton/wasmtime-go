@@ -17,7 +17,7 @@ jobs:
         submodules: true
 
     - run: rustup target add x86_64-pc-windows-gnu
-    - run: cmake -S crates/c-api -B target/c-api --install-prefix "$(pwd)/artifacts" -DWASMTIME_TARGET=x86_64-pc-windows-gnu -DCMAKE_BUILD_TYPE=Debug
+    - run: cmake -S crates/c-api -B target/c-api --install-prefix "$(pwd)/artifacts" -DWASMTIME_TARGET=x86_64-pc-windows-gnu
       shell: bash
       working-directory: wasmtime
 
